@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Library Management System · Booker's Club</title>
+        <!--Bootstrap CSS-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+        <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet">
+        <link href="main.css" rel="stylesheet">
+        <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    </head>
+    <body>
+        <div class="library-page">
+            <div class="library-page-content">
+                <div class="library-catalog">
+
+                    <!--  HEADER  -->
+                    <div class="library-catalog-header">
+                        <div class="d-flex align-items-center gap-3">
+                            <div>
+                                <img src="images/CompanyLogo.png" alt="Company Logo" class="library-role-badge-img">
+                                <h1>Booker's Club</h1>
+                                <div class="d-flex align-items-center gap-2 mt-1">
+                                    <span class="library-role-badge">
+                                        Management · Inventory System
+                                        
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--  End Of Header -->
+
+                    <!-- Tabs -->
+                    <ul class="nav nav-tabs mb-0" id="genreTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="scifi-tab" data-bs-toggle="tab" data-bs-target="#scifi" type="button" role="tab" aria-controls="scifi" aria-selected="true">Sci-Fi & Cyberpunk</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="fantasy-tab" data-bs-toggle="tab" data-bs-target="#fantasy" type="button" role="tab" aria-controls="fantasy" aria-selected="false">Fantasy & Supernatural</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="action-tab" data-bs-toggle="tab" data-bs-target="#action" type="button" role="tab" aria-controls="action" aria-selected="false">Action, Adventure & Martial Arts</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="romance-tab" data-bs-toggle="tab" data-bs-target="#romance" type="button" role="tab" aria-controls="romance" aria-selected="false">Romance & Drama</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="mystery-tab" data-bs-toggle="tab" data-bs-target="#mystery" type="button" role="tab" aria-controls="mystery" aria-selected="false">Mystery, Horror & Psychological</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="academics-tab" data-bs-toggle="tab" data-bs-target="#academics" type="button" role="tab" aria-controls="academics" aria-selected="false">Academics, Non-Fiction & Skill Building</button>
+                        </li>
+                    </ul>
+
+                    <!-- Tab Content -->
+                    <div class="tab-content mt-2" id="genreTabsContent">
+
+                        <!-- 1. Sci-Fi & Cyberpunk -->
+                        <div class="tab-pane fade show active" id="scifi" role="tabpanel" aria-labelledby="scifi-tab">
+                            <div class="book-table-wrap">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Title</th>
+                                            <th>Author</th>
+                                            <th>Year</th>
+                                            <th>Status</th>
+                                            <th>Call No.</th>
+                                            <th>Borrower</th>
+                                            <th class="text-end">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Book 1: Available tag -->
+                                        <tr>
+                                            <td>Neon Requiem</td>
+                                            <td>K. Vasquez</td>
+                                            <td>2022</td>
+                                            <td><span class="book-status book-status-available">Available</span></td>
+                                            <td>001</td>
+                                            <td><span class="book-borrower-empty">-</span></td>
+                                            <td class="text-end book-actions">
+                                                <i class="bi bi-eye"></i><i class="bi bi-pencil-square"></i><i class="bi bi-trash3"></i>
+                                            </td>
+                                        </tr>
+                                        <!-- Book 2: Borrowed tag -->
+                                        <tr>
+                                            <td>Synthwave Horizon</td>
+                                            <td>J. Park</td>
+                                            <td>2021</td>
+                                            <td><span class="book-status book-status-borrowed">Borrowed</span></td>
+                                            <td>002</td>
+                                            <td><span class="book-borrower"><i class="bi bi-person-badge"></i>ID:001</span></td>
+                                            <td class="text-end book-actions">
+                                                <i class="bi bi-eye"></i><i class="bi bi-pencil-square"></i><i class="bi bi-trash3"></i>
+                                            </td>
+                                        </tr>
+                                        <!-- Book 3: In Process tag -->
+                                        <tr>
+                                            <td>Digital Alchemy</td>
+                                            <td>R. Chen</td>
+                                            <td>2023</td>
+                                            <td><span class="book-status book-status-inprocess">In Process</span></td>
+                                            <td>003</td>
+                                            <td><span class="book-borrower-empty">-</span></td>
+                                            <td class="text-end book-actions">
+                                                <i class="bi bi-eye"></i><i class="bi bi-pencil-square"></i><i class="bi bi-trash3"></i>
+                                            </td>
+                                        </tr>
+                                        <!-- Book 4: Missing tag -->
+                                        <tr>
+                                            <td>Chrome Lotus</td>
+                                            <td>A. Iwata</td>
+                                            <td>2020</td>
+                                            <td><span class="book-status book-status-missing">Missing</span></td>
+                                            <td>004</td>
+                                            <td><span class="book-borrower"><i class="bi bi-person-badge"></i>ID:002</span></td>
+                                            <td class="text-end book-actions">
+                                                <i class="bi bi-eye"></i><i class="bi bi-pencil-square"></i><i class="bi bi-trash3"></i>
+                                            </td>
+                                        </tr>
+                                        <!-- Book 5: Damaged tag -->
+                                        <tr>
+                                            <td>Quantum Thief</td>
+                                            <td>M. Rajaniemi</td>
+                                            <td>2019</td>
+                                            <td><span class="book-status book-status-damaged">Damaged</span></td>
+                                            <td>005</td>
+                                            <td><span class="book-borrower"><i class="bi bi-person-badge"></i>ID:003</span></td>
+                                            <td class="text-end book-actions">
+                                                <i class="bi bi-eye"></i><i class="bi bi-pencil-square"></i><i class="bi bi-trash3"></i>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- 2. Fantasy & Supernatural -->
+                        <div class="tab-pane fade" id="fantasy" role="tabpanel" aria-labelledby="fantasy-tab">
+                            <div class="book-table-wrap">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Title</th>
+                                            <th>Author</th>
+                                            <th>Year</th>
+                                            <th>Status</th>
+                                            <th>Call No.</th>
+                                            <th>Borrower</th>
+                                            <th class="text-end">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- No entries yet if updating copy the Sci-Fi & Cyberpunk layout -->
+                                    </tbody>
+                                </table>
+                                <div class="book-empty-state">
+                                    <i class="bi bi-journal-x"></i>
+                                    <p>No titles in this genre yet</p>
+                                    <span>Entries will appear here once added</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3. Action, Adventure & Martial Arts -->
+                        <div class="tab-pane fade" id="action" role="tabpanel" aria-labelledby="action-tab">
+                            <div class="book-table-wrap">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Title</th>
+                                            <th>Author</th>
+                                            <th>Year</th>
+                                            <th>Status</th>
+                                            <th>Call No.</th>
+                                            <th>Borrower</th>
+                                            <th class="text-end">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- No entries yet if updating copy the Sci-Fi & Cyberpunk layout -->
+                                    </tbody>
+                                </table>
+                                <div class="book-empty-state">
+                                    <i class="bi bi-journal-x"></i>
+                                    <p>No titles in this genre yet</p>
+                                    <span>Entries will appear here once added</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 4. Romance & Drama -->
+                        <div class="tab-pane fade" id="romance" role="tabpanel" aria-labelledby="romance-tab">
+                            <div class="book-table-wrap">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Title</th>
+                                            <th>Author</th>
+                                            <th>Year</th>
+                                            <th>Status</th>
+                                            <th>Call No.</th>
+                                            <th>Borrower</th>
+                                            <th class="text-end">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- No entries yet if updating copy the Sci-Fi & Cyberpunk layout -->
+                                    </tbody>
+                                </table>
+                                <div class="book-empty-state">
+                                    <i class="bi bi-journal-x"></i>
+                                    <p>No titles in this genre yet</p>
+                                    <span>Entries will appear here once added</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 5. Mystery, Horror & Psychological -->
+                        <div class="tab-pane fade" id="mystery" role="tabpanel" aria-labelledby="mystery-tab">
+                            <div class="book-table-wrap">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Title</th>
+                                            <th>Author</th>
+                                            <th>Year</th>
+                                            <th>Status</th>
+                                            <th>Call No.</th>
+                                            <th>Borrower</th>
+                                            <th class="text-end">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- No entries yet if updating copy the Sci-Fi & Cyberpunk layout -->
+                                    </tbody>
+                                </table>
+                                <div class="book-empty-state">
+                                    <i class="bi bi-journal-x"></i>
+                                    <p>No titles in this genre yet</p>
+                                    <span>Entries will appear here once added</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 6. Academics, Non-Fiction & Skill Building -->
+                        <div class="tab-pane fade" id="academics" role="tabpanel" aria-labelledby="academics-tab">
+                            <div class="book-table-wrap">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Title</th>
+                                            <th>Author</th>
+                                            <th>Year</th>
+                                            <th>Status</th>
+                                            <th>Call No.</th>
+                                            <th>Borrower</th>
+                                            <th class="text-end">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <!-- No entries yet if updating copy the Sci-Fi & Cyberpunk layout -->
+                                    </tbody>
+                                </table>
+                                <div class="book-empty-state">
+                                    <i class="bi bi-journal-x"></i>
+                                    <p>No titles in this genre yet</p>
+                                    <span>Entries will appear here once added</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Footer -->
+                    <div class="library-footer">
+                        <span>Group 4 Prototype Library System</span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

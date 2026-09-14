@@ -5,11 +5,53 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Slideshow image*/
+.landing-slideshow {
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+}
+
+.landing-slideshow .slide {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    animation: landingSlideFade 24s infinite;
+}
+
+.landing-slideshow .slide:nth-child(1) { background-image: url('https://images.unsplash.com/photo-1499447155021-4907f71b9ef5?w=1600&q=80&auto=format&fit=crop'); animation-delay: 0s; }
+.landing-slideshow .slide:nth-child(2) { background-image: url('https://images.unsplash.com/photo-1603058817990-2b9a9abbce86?w=1600&q=80&auto=format&fit=crop'); animation-delay: 6s; }
+.landing-slideshow .slide:nth-child(3) { background-image: url('https://images.unsplash.com/photo-1709924168698-620ea32c3488?w=1600&q=80&auto=format&fit=crop'); animation-delay: 12s; }
+.landing-slideshow .slide:nth-child(4) { background-image: url('https://images.unsplash.com/photo-1614620026694-f5f38182ab9f?w=1600&q=80&auto=format&fit=crop'); animation-delay: 18s; }
+
+@keyframes landingSlideFade {
+    0%   { opacity: 0; }
+    4%   { opacity: 1; }
+    25%  { opacity: 1; }
+    29%  { opacity: 0; }
+    100% { opacity: 0; }
+}
+
+/* Bg Overlay */
+.landing-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(20, 18, 10, 0.55);
+    z-index: -1;
 }
 
 .landing {
     text-align: center;
     padding: 40px 20px;
+    color: #fff;
+    position: relative;
+    z-index: 1;
 }
 
 h1 {
@@ -38,9 +80,10 @@ p {
     gap: 8px;
     width: 220px;
     padding: 30px 20px;
-    background: #d3cda2;
+    background: rgba(211, 205, 162, 0.9);
     color: black;
     text-decoration: none;
+    backdrop-filter: blur(2px);
 }
 
 .choices a:hover {

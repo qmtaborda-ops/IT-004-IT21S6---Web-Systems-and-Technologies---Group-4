@@ -5,7 +5,7 @@ body {
 }
 
 .library-catalog-header {
-  margin: 0; /* removed the 20px gap that exposed the body background */
+  margin: 0;
   background: #fff;
   color: #c1b252;
   padding: 20px 30px;

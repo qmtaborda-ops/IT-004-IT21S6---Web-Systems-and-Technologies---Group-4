@@ -273,5 +273,69 @@
             <span>Booker's Club · Group 4 prototype</span>
         </div>
         <script type="module" src="users.js"></script>
+        
+        <!-- Borrow Modal -->
+<div class="modal fade" id="borrowModal" tabindex="-1" aria-labelledby="borrowModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="borrowModalLabel">Borrow Book</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="borrowForm">
+                    <!-- Borrower Date -->
+                    <div class="mb-3">
+                        <label for="borrowDate" class="form-label">Borrow Date</label>
+                        <input type="date" class="form-control" id="borrowDate" required>
+                    </div>
+
+                    <!-- Return Date -->
+                    <div class="mb-3">
+                        <label for="returnDate" class="form-label">Return Date (Max 3 weeks)</label>
+                        <input type="date" class="form-control" id="returnDate" required>
+                        <div id="dateError" class="text-danger mt-1" style="display:none; font-size: 0.875em;">
+                            Return date cannot exceed 3 weeks from the borrow date.
+                        </div>
+                    </div>
+
+                    <!-- Terms & Conditions Checkbox -->
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="termsCheck" required>
+                        <label class="form-check-label" for="termsCheck">
+                            I have read the <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">terms and conditions</a> of borrowing a book.
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" id="confirmBorrowBtn">Confirm Borrow</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Terms and Conditions Modal (Optional, but opens when link is clicked) -->
+<div class="modal fade" id="termsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Terms and Conditions</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>1. Books must be returned within 3 weeks of the borrow date.</p>
+                <p>2. Late returns will incur a fine.</p>
+                <p>3. Damaged books must be reported immediately.</p>
+                <p>4. The borrower is responsible for the book while it is in their possession.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+        
     </body>
 </html>

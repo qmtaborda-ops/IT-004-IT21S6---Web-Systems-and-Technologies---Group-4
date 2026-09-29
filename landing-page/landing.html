@@ -5,39 +5,148 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Booker's Club</title>
         <!--Bootstrap CSS-->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" 
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
         <!--Page Styles-->
-        <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet">
         <link href="landingStyles.css" rel="stylesheet">
+        <!--Bootstrap JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" 
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     </head>
     <body>
-
-        <!-- Slideshow image -->
-        <div class="landing-slideshow">
-            <div class="slide"></div>
-            <div class="slide"></div>
-            <div class="slide"></div>
-            <div class="slide"></div>
-        </div>
-        <div class="landing-overlay"></div>
-
-        <div class="landing">
-            <h1>Booker's Club</h1>
-            <p>A library management system for browsing, tracking, and managing the collection. Choose how you'd like to continue.</p>
-
-            <div class="choices">
-                <a href="../user-pages/users.html">
-                    <i class="bi bi-person"></i>
-                    <span>Enter as User</span>
-                    <small>Browse the collection</small>
-                </a>
-                <a href="../admin-pages/main.html">
-                    <i class="bi bi-gear-wide-connected"></i>
-                    <span>Enter as Admin</span>
-                    <small>Manage inventory</small>
-                </a>
+        <nav class="navbar sticky-top navbar-expand-md">
+            <a class="navbar-brand" href="#">
+                <img src="../images/CompanyLogo.png" alt="Company Logo" width="30" height="24">
+                Booker's Club
+            </a>
+            <button class="navbar-toggler navbar-dark" type="button" data-toggle="collapse" data-targer="#main-navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="main-navigation">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#services">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button" class="nav-link btn btn-primary" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <header class="border-bottom pb-2 header container-fluid">
+            <div class="overlay"></div>
+            <div class="description">
+                <h1>Welcome to Booker's Club</h1>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. 
+                    Assumenda consequatur eos reprehenderit repudiandae nobis quod laborum placeat corrupti, 
+                    sunt rem officiis dolorum error accusantium in necessitatibus eaque temporibus blanditiis aspernatur.</p>
+            </div>
+            <div class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="https://images.unsplash.com/photo-1499447155021-4907f71b9ef5?w=1600&q=80&auto=format&fit=crop" class="d-block w-100" alt="...">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="https://images.unsplash.com/photo-1603058817990-2b9a9abbce86?w=1600&q=80&auto=format&fit=crop" class="d-block w-100" alt="...">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="https://images.unsplash.com/photo-1709924168698-620ea32c3488?w=1600&q=80&auto=format&fit=crop" class="d-block w-100" alt="...">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="https://images.unsplash.com/photo-1614620026694-f5f38182ab9f?w=1600&q=80&auto=format&fit=crop" class="d-block w-100" alt="...">
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div class="container features" id="about">
+            <h2>About Us</h2>
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-12">
+                    <h3 class="feature-title">Lorem Ipsum</h3>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. 
+                        Fugit vero perferendis ducimus dolore possimus, itaque quam ab at, 
+                        non assumenda nostrum consequatur similique harum omnis. 
+                        Enim consectetur ut eius consequatur!
+                    </p>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12">
+                    <h3 class="feature-title">Lorem Ipsum</h3>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. 
+                        Fugit vero perferendis ducimus dolore possimus, itaque quam ab at, 
+                        non assumenda nostrum consequatur similique harum omnis. 
+                        Enim consectetur ut eius consequatur!
+                    </p>
+                </div>
             </div>
         </div>
+        <div class="container features" id="services">
+            <h2>Our Services</h2>
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-12">
+                    <h3 class="feature-title">Lorem Ipsum</h3>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. 
+                        Fugit vero perferendis ducimus dolore possimus, itaque quam ab at, 
+                        non assumenda nostrum consequatur similique harum omnis. 
+                        Enim consectetur ut eius consequatur!
+                    </p>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12">
+                    <h3 class="feature-title">Lorem Ipsum</h3>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. 
+                        Fugit vero perferendis ducimus dolore possimus, itaque quam ab at, 
+                        non assumenda nostrum consequatur similique harum omnis. 
+                        Enim consectetur ut eius consequatur!
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Login as:</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="choices">
+                            <a href="../user-pages/users.html">
+                                <i class="bi bi-person"></i>
+                                <span>User</span>
+                                <small>Browse the collection</small>
+                            </a>
+                            <a href="../admin-pages/main.html">
+                                <i class="bi bi-gear-wide-connected"></i>
+                                <span>Admin</span>
+                                <small>Manage inventory</small>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="page-footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-md-8 col-sm-12">
+                        <h6 class="text-uppercase font-weight-bold">Additional Information</h6>
+                        <p>
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. 
+                            Dicta vel ut, at ducimus corrupti ad consequuntur. 
+                        </p>
+                        <p>
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. 
+                            Dicta vel ut, at ducimus corrupti ad consequuntur. 
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-copyright text-center">© 2026 Copyright: MyWebsite.com</div>
+        </footer>
     </body>
 </html>

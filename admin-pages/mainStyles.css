@@ -1,38 +1,43 @@
+/* Admin Old Book Theme */
+
 body {
-  padding: 0;
   margin: 0;
-  background: #9ca193;
+  padding: 0;
+  font-family: 'EB Garamond', Georgia, serif;
+  color: #2e2418;
+  background: #f2e8d0;
 }
 
 .library-catalog-header {
   margin: 0;
-  background: #fff;
-  color: #c1b252;
+  background: #3e2a1e;
+  color: #e3c565;
   padding: 20px 30px;
   display: flex;
   align-items: center;
   gap: 16px;
   width: 100%;
+  border-bottom: 3px double #c9a227;
 }
 
 .library-catalog-header .library-role-badge-img {
   width: 48px;
   height: 48px;
   object-fit: contain;
-  flex-shrink: 0;
+  border-radius: 50%;
+  border: 2px solid #c9a227;
 }
 
 .library-catalog-header h1 {
   margin: 0;
+  font-family: 'Playfair Display', Georgia, serif;
   font-size: 26px;
-  font-weight: bold;
-  line-height: 1.2;
 }
 
 .library-role-badge {
-  color: #c1b252;
-  font-size: 15px;
-  font-weight: 600;
+  color: #c9a227;
+  font-size: 14px;
+  font-style: italic;
 }
 
 .library-user-tools {
@@ -44,6 +49,14 @@ body {
   gap: 8px;
 }
 
+.library-user-greeting {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-style: italic;
+}
+
 .library-user-search {
   display: flex;
   flex-direction: row-reverse;
@@ -51,65 +64,155 @@ body {
   gap: 8px;
 }
 
+.library-user-search input {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid #c9a227;
+  border-radius: 3px;
+  padding: 6px 10px;
+  color: #e3c565;
+  font-size: 13px;
+}
+
+/* Tabs */
 .nav-tabs {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
   margin: 0;
-  background: #d3cda2;
-  border-bottom: none;
+  background: #5c3d28;
+  border-bottom: 2px solid #c9a227;
   padding: 0;
   width: 100%;
 }
 
-.nav-tabs .nav-item {
-  margin: 0;
-}
-
 .nav-tabs .nav-link {
   border: none;
-  border-radius: 0;
   background: transparent;
-  color: #5a5a3f; /* replaces Bootstrap's default blue */
+  color: #e3c565;
   padding: 12px 18px;
+  font-family: 'Playfair Display', serif;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   white-space: nowrap;
-  transition: background 0.15s ease, color 0.15s ease;
 }
 
 .nav-tabs .nav-link:hover {
-  background: rgba(255, 255, 255, 0.35);
-  color: #3d3d2b;
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .nav-tabs .nav-link.active {
-  background: #fff;
-  color: #2b2b2b;
-  font-weight: 600;
-  border-radius: 0;
+  background: #f2e8d0;
+  color: #3e2a1e;
+  border-top: 3px solid #c9a227;
 }
 
-.library-footer{
+/* Table */
+.book-table-wrap {
+  padding: 20px 30px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+
+.table thead th {
+  border: none;
+  border-bottom: 2px solid #3e2a1e;
+  color: #3e2a1e;
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  padding: 10px;
+}
+
+.table tbody td {
+  border: none;
+  border-bottom: 1px solid rgba(74, 47, 31, 0.2);
+  padding: 10px;
+}
+
+.table tbody tr:hover {
+  background: rgba(201, 162, 39, 0.12);
+}
+
+
+.book-status {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid;
+}
+
+.book-status-available { color: #4c6b3f; border-color: #4c6b3f; background: rgba(76,107,63,0.12); }
+.book-status-borrowed  { color: #a15c2f; border-color: #a15c2f; background: rgba(161,92,47,0.12); }
+.book-status-inprocess { color: #5b7a8c; border-color: #5b7a8c; background: rgba(91,122,140,0.12); }
+.book-status-missing   { color: #8b3a3a; border-color: #8b3a3a; background: rgba(139,58,58,0.12); }
+.book-status-damaged   { color: #7a6a53; border-color: #7a6a53; background: rgba(122,106,83,0.12); }
+
+.book-borrower {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  color: #6b5a45;
+}
+
+.book-borrower-empty {
+  color: #ab9d81;
+}
+
+.book-actions i {
+  color: #5c3d28;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.book-actions i:hover {
+  color: #c9a227;
+}
+
+.book-empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #6b5a45;
+}
+
+.book-empty-state i {
+  display: block;
+  font-size: 30px;
+  color: #c9a227;
+  margin-bottom: 8px;
+}
+
+
+.library-footer {
   width: 100%;
   max-width: none;
   margin: 0;
-  background:#faf8f3;
-  border-top:1px solid #e6e0cf;
-  padding: 80px 30px;
-  text-align:center;
+  background: #3e2a1e;
+  border-top: 3px double #c9a227;
+  padding: 20px 30px;
+  text-align: center;
 }
 
-.library-footer span{
-  font-size:12.5px;
-  color:#bb8d00;
-  letter-spacing:.01em;
+.library-footer span {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 13px;
+  color: #e3c565;
 }
+
 
 @media (max-width: 600px) {
   .library-catalog-header { padding: 16px 20px; }
-  .library-catalog-header h1 { font-size: 22px; }
+  .library-catalog-header h1 { font-size: 20px; }
+  .library-user-tools { align-items: flex-start; margin-left: 0; }
   .nav-tabs .nav-link { padding: 10px 12px; font-size: 13px; }
-  .library-footer { padding: 30px 15px; }
-  .library-footer span { font-size:11.5px; }
+  .book-table-wrap { padding: 16px 15px; }
+  .table { font-size: 13px; }
+  .library-footer { padding: 16px 15px; }
 }

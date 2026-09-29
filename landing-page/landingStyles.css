@@ -2,7 +2,7 @@ body {
     padding: 0;
     margin: 0;
 }
-
+/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
 /*---navigation bar---*/
 .navbar {
     background-color: #fff;
@@ -12,7 +12,7 @@ body {
     color: #c1b252;
     margin-left: 20px;
 }
-
+/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
 .nav-link {
     margin-right: 1em !important;
 }
@@ -31,7 +31,7 @@ body {
     position: relative;
     overflow: hidden;
 }
-
+/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
 .carousel {
     position: absolute;
     inset: 0;
@@ -56,7 +56,7 @@ body {
     z-index: 1;
     background: rgba(0, 0, 0, 0.8);
 }
-
+/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
 .description {
     position: absolute;
     left: 50%;
@@ -74,7 +74,7 @@ body {
     position: relative;
     color: black;
 }
-
+/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
 .feature-title {
   font-size: 1.3rem;
   font-weight: 700;
@@ -91,7 +91,7 @@ body {
     text-align: center;
     width: 100%;
 }
-
+/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
 .choices {
     display: flex;
     justify-content: center;
@@ -111,7 +111,7 @@ body {
     text-decoration: none;
     backdrop-filter: blur(2px);
 }
-
+/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
 .choices a:hover {
     background: #c1b252;
     color: #fff;
@@ -128,7 +128,7 @@ body {
   color: #666;
   padding: 40px 0;
 }
-
+/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
 @media (max-width: 575.98px) {
 
   .description {
@@ -139,7 +139,7 @@ body {
     transform: none;
     text-align: center;
   }
-
+/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
   .description h1 {
     font-size: 2em;
   }
@@ -152,3 +152,4 @@ body {
     margin: 0;
   }
 }
+/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */

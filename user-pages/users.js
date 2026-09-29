@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-
+/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
     const termsCheck = document.getElementById('termsCheck');
     const confirmBtn = document.getElementById('confirmBorrowBtn');
     const borrowDateInput = document.getElementById('borrowDate');
@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
     termsCheck.addEventListener('change', function () {
         confirmBtn.disabled = !this.checked;
     });
-
+/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
     const today = new Date().toISOString().split('T')[0];
     borrowDateInput.setAttribute('min', today);
     returnDateInput.setAttribute('min', today);
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const maxReturn = new Date(borrow);
         maxReturn.setMonth(maxReturn.getMonth() + 2);
-
+/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
         const defaultStr = defaultReturn.toISOString().split('T')[0];
         const maxStr = maxReturn.toISOString().split('T')[0];
 
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         returnDateInput.dispatchEvent(new Event('change'));
     });
-
+/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
     returnDateInput.addEventListener('change', function () {
         const borrowVal = borrowDateInput.value;
         const returnVal = this.value;
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const borrow = new Date(borrowVal);
         const ret = new Date(returnVal);
         const diffDays = Math.ceil((ret - borrow) / (1000 * 60 * 60 * 24));
-
+/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
         if (ret < borrow) {
             dateError.textContent = "Return date cannot be earlier than the borrow date.";
             dateError.style.display = 'block';
@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function () {
             dateError.style.display = 'none';
         }
     });
-
+/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
     confirmBtn.addEventListener('click', function () {
         if (!borrowDateInput.value || !returnDateInput.value) {
             alert("Please select both dates.");
@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function () {
             alert("Please fix the date errors.");
             return;
         }
-
+/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
         notification.style.display = 'block';
         window.scrollTo({ top: 0, behavior: 'smooth' });
 
@@ -86,3 +86,4 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 });
+/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */

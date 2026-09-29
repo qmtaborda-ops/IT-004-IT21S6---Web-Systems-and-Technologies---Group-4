@@ -1,5 +1,5 @@
 /* Admin Old Book Theme */
-
+/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
 body {
   margin: 0;
   padding: 0;
@@ -27,7 +27,7 @@ body {
   border-radius: 50%;
   border: 2px solid #c9a227;
 }
-
+/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
 .library-catalog-header h1 {
   margin: 0;
   font-family: 'Playfair Display', Georgia, serif;
@@ -39,7 +39,7 @@ body {
   font-size: 14px;
   font-style: italic;
 }
-
+/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
 .library-user-tools {
   margin-left: auto;
   align-self: flex-start;
@@ -63,7 +63,7 @@ body {
   align-items: center;
   gap: 8px;
 }
-
+/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
 .library-user-search input {
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid #c9a227;
@@ -72,7 +72,7 @@ body {
   color: #e3c565;
   font-size: 13px;
 }
-
+/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
 /* Tabs */
 .nav-tabs {
   display: flex;
@@ -95,7 +95,7 @@ body {
   font-weight: 600;
   white-space: nowrap;
 }
-
+/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
 .nav-tabs .nav-link:hover {
   background: rgba(255, 255, 255, 0.08);
 }
@@ -116,7 +116,7 @@ body {
   border-collapse: collapse;
   font-size: 15px;
 }
-
+/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
 .table thead th {
   border: none;
   border-bottom: 2px solid #3e2a1e;
@@ -132,7 +132,7 @@ body {
   border-bottom: 1px solid rgba(74, 47, 31, 0.2);
   padding: 10px;
 }
-
+/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
 .table tbody tr:hover {
   background: rgba(201, 162, 39, 0.12);
 }
@@ -146,7 +146,7 @@ body {
   font-weight: 600;
   border: 1px solid;
 }
-
+/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
 .book-status-available { color: #4c6b3f; border-color: #4c6b3f; background: rgba(76,107,63,0.12); }
 .book-status-borrowed  { color: #a15c2f; border-color: #a15c2f; background: rgba(161,92,47,0.12); }
 .book-status-inprocess { color: #5b7a8c; border-color: #5b7a8c; background: rgba(91,122,140,0.12); }
@@ -170,7 +170,7 @@ body {
   margin-left: 10px;
   cursor: pointer;
 }
-
+/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
 .book-actions i:hover {
   color: #c9a227;
 }
@@ -188,7 +188,7 @@ body {
   margin-bottom: 8px;
 }
 
-
+/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
 .library-footer {
   width: 100%;
   max-width: none;
@@ -205,7 +205,7 @@ body {
   font-size: 13px;
   color: #e3c565;
 }
-
+/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
 
 @media (max-width: 600px) {
   .library-catalog-header { padding: 16px 20px; }

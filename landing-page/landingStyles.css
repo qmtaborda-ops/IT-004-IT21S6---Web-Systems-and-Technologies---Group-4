@@ -17,6 +17,14 @@ body {
     margin-right: 1em !important;
 }
 
+.nav-item button {
+    background-color: #e0d16f;;
+}
+
+.nav-item button:hover {
+    background-color: #ffeb67;
+}
+
 /*---header---*/
 .header {
     min-height: 100vh;

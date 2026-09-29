@@ -39,8 +39,9 @@ body {
   margin-left: auto;
   align-self: flex-start;
   display: flex;
-  align-items: center;
-  gap: 16px;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
 }
 
 .library-user-search {

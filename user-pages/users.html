@@ -274,8 +274,7 @@
         </div>
         <script type="module" src="users.js"></script>
         
-        <!-- Borrow Modal -->
-<div class="modal fade" id="borrowModal" tabindex="-1" aria-labelledby="borrowModalLabel" aria-hidden="true">
+  <div class="modal fade" id="borrowModal" tabindex="-1" aria-labelledby="borrowModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -292,14 +291,13 @@
 
                     <!-- Return Date -->
                     <div class="mb-3">
-                        <label for="returnDate" class="form-label">Return Date (Max 3 weeks)</label>
+                        <label for="returnDate" class="form-label">Return Date (Max 2 months)</label>
                         <input type="date" class="form-control" id="returnDate" required>
                         <div id="dateError" class="text-danger mt-1" style="display:none; font-size: 0.875em;">
-                            Return date cannot exceed 3 weeks from the borrow date.
+                            Return date cannot exceed 2 months from the borrow date.
                         </div>
                     </div>
 
-                    <!-- Terms & Conditions Checkbox -->
                     <div class="mb-3 form-check">
                         <input type="checkbox" class="form-check-input" id="termsCheck" required>
                         <label class="form-check-label" for="termsCheck">
@@ -310,37 +308,92 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-success" id="confirmBorrowBtn">Confirm Borrow</button>
+                <button type="button" class="btn btn-success" id="confirmBorrowBtn" disabled>Confirm Borrow</button>
             </div>
         </div>
     </div>
 </div>
+        <script>
+$(document).ready(function () {
 
-<!-- Terms and Conditions Modal (Optional, but opens when link is clicked) -->
-<div class="modal fade" id="termsModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Terms and Conditions</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>1. Books must be returned within 3 weeks of the borrow date.</p>
-                <p>2. Late returns will incur a fine.</p>
-                <p>3. Damaged books must be reported immediately.</p>
-                <p>4. The borrower is responsible for the book while it is in their possession.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
+    // 1. Checkbox -> Enable/Disable Button
+    $('#termsCheck').on('change', function () {
+        $('#confirmBorrowBtn').prop('disabled', !$(this).is(':checked'));
+    });
 
-    <div id="borrowNotification" class="alert alert-success alert-dismissible fade show" role="alert" style="display: none;">
-    <i class="bi bi-check-circle-fill me-2"></i> <strong>Borrow request sent successfully!</strong> Please go to the librarian for confirmation.
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
+    // 2. Set min date to today
+    const today = new Date().toISOString().split('T')[0];
+    $('#borrowDate, #returnDate').attr('min', today);
+
+    // 3. Borrow Date -> Set Default (1 month) and Max (2 months) Return Date
+    $('#borrowDate').on('change', function () {
+        const borrowVal = $(this).val();
+        if (!borrowVal) return;
+
+        const borrow = new Date(borrowVal);
         
+        // Calculate Default Return Date (1 Month later)
+        const defaultReturn = new Date(borrow);
+        defaultReturn.setMonth(defaultReturn.getMonth() + 1);
+        
+        // Calculate Max Return Date (2 Months later)
+        const maxReturn = new Date(borrow);
+        maxReturn.setMonth(maxReturn.getMonth() + 2);
+
+        const defaultStr = defaultReturn.toISOString().split('T')[0];
+        const maxStr = maxReturn.toISOString().split('T')[0];
+
+        // Apply the default and max limits to the return date input
+        $('#returnDate').val(defaultStr); // Auto-fill 1 month
+        $('#returnDate').attr('max', maxStr); // Limit to 2 months
+        $('#returnDate').attr('min', borrowVal); // Cannot be before borrow date
+        
+        // Trigger validation
+        $('#returnDate').trigger('change'); 
+    });
+
+    // 4. Validate Return Date (Must be between 1 and 2 months, or just <= 2 months)
+    $('#returnDate').on('change', function () {
+        const borrowVal = $('#borrowDate').val();
+        const returnVal = $(this).val();
+        
+        if (!borrowVal || !returnVal) return;
+
+        const borrow = new Date(borrowVal);
+        const ret = new Date(returnVal);
+
+        // Calculate difference in days
+        const diffDays = Math.ceil((ret - borrow) / (1000 * 60 * 60 * 24));
+        
+        // 2 months is roughly 61 days (you can adjust to 60 if you prefer)
+        if (ret < borrow) {
+            $('#dateError').text("Return date cannot be earlier than the borrow date.").show();
+        } else if (diffDays > 61) { 
+            $('#dateError').text("Return date cannot exceed 2 months from the borrow date.").show();
+        } else {
+            $('#dateError').hide();
+        }
+    });
+
+    // 5. Confirm Borrow
+    $('#confirmBorrowBtn').on('click', function () {
+        // Validation
+        if (!$('#borrowDate').val() || !$('#returnDate').val()) return alert("Please select both dates.");
+        if (!$('#termsCheck').is(':checked')) return alert("Please agree to the terms.");
+        if ($('#dateError').is(':visible')) return alert("Please fix the date errors.");
+
+        // Show success notification and reset
+        $('#borrowNotification').show();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        $('#borrowForm')[0].reset();
+        $('#confirmBorrowBtn').prop('disabled', true);
+        $('#dateError').hide();
+        
+        // Close Modal
+        bootstrap.Modal.getInstance(document.getElementById('borrowModal')).hide();
+    });
+
+});
+</script>
     </body>
 </html>

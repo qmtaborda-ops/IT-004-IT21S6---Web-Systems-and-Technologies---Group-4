@@ -267,19 +267,18 @@
             </div>
 
         </div>
+        
         <!--  END TAB CONTENT  -->
-<!-- De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S -->
         <!--  FOOTER  -->
         <div class="library-footer">
             <span>Booker's Club · Group 4 prototype</span>
         </div>
-        
-        
-  <div class="modal fade" id="borrowModal" tabindex="-1" aria-labelledby="borrowModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+        <!-- De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S -->
+  <div class="modal fade" id="borrowModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog" role="dialog" aria-labelledby="borrowModalLabel" aria-modal="true">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="borrowModalLabel">Borrow Book</h5>
+                <h2 class="modal-title fs-5" id="borrowModalLabel">Borrow Book</h2>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -298,7 +297,8 @@
                             Return date cannot exceed 2 months from the borrow date.
                         </div>
                     </div>
-
+<!-- De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S -->
+                    <!-- Terms & Conditions Checkbox -->
                     <div class="mb-3 form-check">
                         <input type="checkbox" class="form-check-input" id="termsCheck" required>
                         <label class="form-check-label" for="termsCheck">
@@ -314,33 +314,31 @@
         </div>
     </div>
 </div>
-        <!-- De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S -->
         <div id="borrowNotification" class="alert alert-success alert-dismissible fade show" role="alert" style="display: none;">
         <i class="bi bi-check-circle-fill me-2"></i> <strong>Borrow request sent successfully!</strong> Please go to the librarian for confirmation.
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-
+<!-- De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S -->
         <div class="modal fade" id="termsModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Terms and Conditions</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                        <div class="modal-body">
-                            <p>1. Books must be returned within 2 months of the borrow date.</p>
-                            <p>2. Late returns will incur a fine.</p>
-                            <p>3. Damaged books must be reported immediately.</p>
-                            <p>4. The borrower is responsible for the book while it is in their possession.</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        </div>
-                </div>
+    <div class="modal-dialog modal-dialog-scrollable" role="dialog" aria-labelledby="termsModalLabel" aria-modal="true">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title fs-5" id="termsModalLabel">Terms and Conditions</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>1. Books must be returned within 2 months of the borrow date.</p>
+                <p>2. Late returns will incur a fine.</p>
+                <p>3. Damaged books must be reported immediately.</p>
+                <p>4. The borrower is responsible for the book while it is in their possession.</p>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
-<!-- De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S -->
-        
+    </div>
+        </div>
+        <!-- De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S -->
        <script src="users.js"></script>
     </body>
 </html>

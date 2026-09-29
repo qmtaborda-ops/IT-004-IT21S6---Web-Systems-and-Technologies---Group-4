@@ -4,7 +4,6 @@ body {
 }
 
 /*---navigation bar---*/
-
 .navbar {
     background-color: #fff;
 }
@@ -73,6 +72,41 @@ body {
   font-weight: 700;
   margin-bottom: 20px;
   text-transform: uppercase;
+}
+
+/*#services {
+    background-color: #999;
+}*/
+
+/*--modal--*/
+.modal-title {
+    text-align: center;
+    width: 100%;
+}
+
+.choices {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.choices a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    width: 220px;
+    padding: 30px 20px;
+    background: rgba(211, 205, 162, 0.9);
+    color: black;
+    text-decoration: none;
+    backdrop-filter: blur(2px);
+}
+
+.choices a:hover {
+    background: #c1b252;
+    color: #fff;
 }
 
 /*--page-footer--*/

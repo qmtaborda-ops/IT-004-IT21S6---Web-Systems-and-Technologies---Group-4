@@ -28,13 +28,13 @@
                         <a class="nav-link" href="#">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">About</a>
+                        <a class="nav-link" href="#about">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Services</a>
+                        <a class="nav-link" href="#services">Services</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" id="login-btn">Login</a>
+                        <button type="button" class="nav-link btn btn-primary" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
                     </li>
                 </ul>
             </div>
@@ -61,7 +61,8 @@
                 </div>
             </div>
         </header>
-        <div class="container features">
+        <div class="container features" id="about">
+            <h2>About Us</h2>
             <div class="row">
                 <div class="col-lg-4 col-md-4 col-sm-12">
                     <h3 class="feature-title">Lorem Ipsum</h3>
@@ -78,6 +79,51 @@
                         non assumenda nostrum consequatur similique harum omnis. 
                         Enim consectetur ut eius consequatur!
                     </p>
+                </div>
+            </div>
+        </div>
+        <div class="container features" id="services">
+            <h2>Our Services</h2>
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-12">
+                    <h3 class="feature-title">Lorem Ipsum</h3>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. 
+                        Fugit vero perferendis ducimus dolore possimus, itaque quam ab at, 
+                        non assumenda nostrum consequatur similique harum omnis. 
+                        Enim consectetur ut eius consequatur!
+                    </p>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12">
+                    <h3 class="feature-title">Lorem Ipsum</h3>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. 
+                        Fugit vero perferendis ducimus dolore possimus, itaque quam ab at, 
+                        non assumenda nostrum consequatur similique harum omnis. 
+                        Enim consectetur ut eius consequatur!
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Login as:</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="choices">
+                            <a href="../user-pages/users.html">
+                                <i class="bi bi-person"></i>
+                                <span>User</span>
+                                <small>Browse the collection</small>
+                            </a>
+                            <a href="../admin-pages/main.html">
+                                <i class="bi bi-gear-wide-connected"></i>
+                                <span>Admin</span>
+                                <small>Manage inventory</small>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

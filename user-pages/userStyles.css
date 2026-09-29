@@ -35,6 +35,20 @@ body {
   font-weight: 600;
 }
 
+.library-user-tools {
+  margin-left: auto;
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.library-user-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .nav-tabs {
   display: flex;
   justify-content: center;

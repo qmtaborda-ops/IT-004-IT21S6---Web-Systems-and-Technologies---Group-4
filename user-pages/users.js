@@ -1,4 +1,3 @@
-const notification = document.getElementById('borrowNotification')
 document.addEventListener('DOMContentLoaded', function () {
 
     const termsCheck = document.getElementById('termsCheck');

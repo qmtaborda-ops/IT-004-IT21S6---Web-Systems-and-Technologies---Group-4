@@ -2,7 +2,7 @@ const API_URL = 'http://localhost/library/';
 
 $(document).ready(function () {
     const $navLinks = $('.navbar-nav .nav-link');
-    const $sections = $('section[id], #catalog, #services, #about');
+    const $sections = $('section[id], #catalog, #services, #about, #inquire');
 
     function updateActiveNav() {
         let currentId = '';

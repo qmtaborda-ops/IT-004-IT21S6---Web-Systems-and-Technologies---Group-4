@@ -108,7 +108,51 @@ $firstName = $nameParts[0];
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Data will be loaded dynamically via users.js -->
+                            <tr> <!-- De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S -->
+                                <td>Neon Requiem</td>
+                                <td>K. Vasquez</td>
+                                <td>2022</td>
+                                <td><span class="book-status book-status-available">Available</span></td>
+                                <td>001</td>
+                                <td class="text-center">
+                                <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#borrowModal">
+                                <i class="bi bi-book"></i> Borrow
+                                </button> 
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Synthwave Horizon</td>
+                                <td>J. Park</td>
+                                <td>2021</td>
+                                <td><span class="book-status book-status-borrowed">Borrowed</span></td>
+                                <td>002</td>
+                                <td class="text-center"></td>
+                            </tr>
+                            <tr> <!-- De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S -->
+                                <td>Digital Alchemy</td>
+                                <td>R. Chen</td>
+                                <td>2023</td>
+                                <td><span class="book-status book-status-inprocess">In Process</span></td>
+                                <td>003</td>
+                                <td class="text-center"></td>
+                            </tr>
+                            <tr>
+                                <td>Chrome Lotus</td>
+                                <td>A. Iwata</td>
+                                <td>2020</td>
+                                <td><span class="book-status book-status-missing">Missing</span></td>
+                                <td>004</td>
+                                <td class="text-center"></td>
+                            </tr>
+                            <tr> <!-- De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S -->
+                                <td>Quantum Thief</td>
+                                <td>M. Rajaniemi</td>
+                                <td>2019</td>
+                                <td><span class="book-status book-status-damaged">Damaged</span></td>
+                                <td>005</td>
+                                <td class="text-center"></td>
+                            </tr>
+                            
                         </tbody>
                     </table>
                 </div>
@@ -125,7 +169,6 @@ $firstName = $nameParts[0];
                                 <th>Year</th>
                                 <th>Status</th>
                                 <th>Book No.</th>
-                                <th class="text-center">Borrow</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -151,7 +194,6 @@ $firstName = $nameParts[0];
                                 <th>Year</th>
                                 <th>Status</th>
                                 <th>Book No.</th>
-                                <th class="text-center">Borrow</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -177,7 +219,6 @@ $firstName = $nameParts[0];
                                 <th>Year</th>
                                 <th>Status</th>
                                 <th>Book No.</th>
-                                <th class="text-center">Borrow</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -203,7 +244,6 @@ $firstName = $nameParts[0];
                                 <th>Year</th>
                                 <th>Status</th>
                                 <th>Book No.</th>
-                                <th class="text-center">Borrow</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -229,7 +269,6 @@ $firstName = $nameParts[0];
                                 <th>Year</th>
                                 <th>Status</th>
                                 <th>Book No.</th>
-                                <th class="text-center">Borrow</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -297,34 +336,25 @@ $firstName = $nameParts[0];
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
 <!-- De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S -->
-        
-        <!-- UPDATED TERMS AND CONDITIONS MODAL -->
         <div class="modal fade" id="termsModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-scrollable" role="dialog" aria-labelledby="termsModalLabel" aria-modal="true">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h2 class="modal-title fs-5" id="termsModalLabel">Terms and Conditions</h2>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>By submitting a borrow request, you agree to the following conditions:</p>
-                        <ol>
-                            <li class="mb-2">A borrow request must include a borrow date and a return date.</li>
-                            <li class="mb-2">The return date must not be earlier than the borrow date and must be within two months of it.</li>
-                            <li class="mb-2">A request is subject to librarian confirmation. The book is not considered borrowed until the request is approved.</li>
-                            <li class="mb-2">Books must be returned by the agreed return date. Late returns incur a fine that is determined by the price of the book.</li>
-                            <li class="mb-2">The borrower is responsible for the book while it is in their possession and must report damage or loss immediately.</li>
-                            <li>Damaged or missing books may result in a liability equal to the listed price of the book.</li>
-                        </ol>
-                    </div>
-                    <div class="modal-footer justify-content-center">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    </div>
-                </div>
+    <div class="modal-dialog modal-dialog-scrollable" role="dialog" aria-labelledby="termsModalLabel" aria-modal="true">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title fs-5" id="termsModalLabel">Terms and Conditions</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>1. Books must be returned within 2 months of the borrow date.</p>
+                <p>2. Late returns will incur a fine.</p>
+                <p>3. Damaged books must be reported immediately.</p>
+                <p>4. The borrower is responsible for the book while it is in their possession.</p>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
-        <!-- END TERMS AND CONDITIONS MODAL -->
-
+    </div>
+        </div>
         <!-- De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S -->
         <!--  ACCOUNT MODAL  -->
         <div class="modal fade" id="accountModal" tabindex="-1" aria-labelledby="accountModalLabel" aria-hidden="true">

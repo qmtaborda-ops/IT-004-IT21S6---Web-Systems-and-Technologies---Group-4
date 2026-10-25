@@ -368,16 +368,16 @@
                             <div class="tab-content">
                                 <div class="tab-pane fade show active" id="login" role="tabpanel"
                                     aria-labelledby="login-tab">
-                                    <form action="../user-pages/users.html">
+                                    <form id="loginForm" data-auth-form="login">
                                         <div class="mb-3">
-                                            <label for="username-input" class="form-label">User Name</label>
-                                            <input type="text" class="form-control" id="username-input"
-                                                placeholder="Enter your first + last name">
+                                            <label for="email-input-login" class="form-label">Email</label>
+                                            <input type="email" class="form-control" id="email-input-login" name="email"
+                                                placeholder="Enter your email" required>
                                         </div>
                                         <div class="mb-3">
                                             <label for="user-pass-login" class="form-label">Password</label>
-                                            <input type="password" class="form-control" id="user-pass-login"
-                                                placeholder="Enter your password">
+                                            <input type="password" class="form-control" id="user-pass-login" name="password"
+                                                placeholder="Enter your password" required>
                                         </div>
                                         <div>
                                             <button type="submit" class="btn btn-primary" id="login-btn">Login</button>
@@ -385,31 +385,31 @@
                                     </form>
                                 </div>
                                 <div class="tab-pane fade" id="signup" role="tabpanel" aria-labelledby="signup-tab">
-                                    <form action="../user-pages/users.html">
+                                    <form id="signupForm" data-auth-form="signup">
                                         <div class="mb-3">
                                             <label for="firstname-input" class="form-label">First Name</label>
-                                            <input type="text" class="form-control" id="firstname-input"
-                                                placeholder="Enter your first name">
+                                            <input type="text" class="form-control" id="firstname-input" name="first_name"
+                                                placeholder="Enter your first name" required>
                                         </div>
                                         <div class="mb-3">
                                             <label for="lastname-input" class="form-label">Last Name</label>
-                                            <input type="text" class="form-control" id="lastname-input"
-                                                placeholder="Enter your last name">
+                                            <input type="text" class="form-control" id="lastname-input" name="last_name"
+                                                placeholder="Enter your last name" required>
                                         </div>
                                         <div class="mb-3">
                                             <label for="email-input" class="form-label">Email</label>
-                                            <input type="email" class="form-control" id="email-input"
-                                                placeholder="Enter your email">
+                                            <input type="email" class="form-control" id="email-input" name="email"
+                                                placeholder="Enter your email" required>
                                         </div>
                                         <div class="mb-3">
                                             <label for="user-pass" class="form-label">Password</label>
-                                            <input type="password" class="form-control" id="user-pass"
-                                                placeholder="Enter your password">
+                                            <input type="password" class="form-control" id="user-pass" name="password"
+                                                placeholder="Enter your password" required>
                                         </div>
                                         <div class="mb-3">
                                             <label for="confirm-pass" class="form-label">Confirm Password</label>
-                                            <input type="password" class="form-control" id="confirm-pass"
-                                                placeholder="Confirm your password">
+                                            <input type="password" class="form-control" id="confirm-pass" name="confirm_password"
+                                                placeholder="Confirm your password" required>
                                         </div>
                                         <div>
                                             <button type="submit" class="btn btn-primary" id="signup-btn">Sign
@@ -424,16 +424,16 @@
                         <div class="modal-header">
                             <h1 class="modal-title fs-5" id="adminModalLabel">Login as Admin</h1>
                         </div>
-                        <form action="../admin-pages/admin.html">
+                        <form id="adminForm" data-auth-form="admin_login">
                             <div class="mb-3">
                                 <label for="adminname-input" class="form-label">User Name</label>
-                                <input type="text" class="form-control" id="adminname-input"
-                                    placeholder="Enter your first + last name">
+                                <input type="text" class="form-control" id="adminname-input" name="username"
+                                    placeholder="Enter your admin username" required>
                             </div>
                             <div class="mb-3">
                                 <label for="adminpass-input" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="adminpass-input"
-                                    placeholder="Enter your password">
+                                <input type="password" class="form-control" id="adminpass-input" name="password"
+                                    placeholder="Enter your password" required>
                             </div>
                             <div>
                                 <button type="submit" class="btn btn-primary" id="admin-login-btn">Login</button>

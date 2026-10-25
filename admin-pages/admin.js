@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost/library/';
+const API_URL = 'http://localhost/IT-004-IT21S6---Web-Systems-and-Technologies---Group-4/database/';
 let currentPane = null;   
 let editingRow = null;   
 

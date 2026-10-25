@@ -20,23 +20,55 @@ if (empty(trim($title))) {
 }
 
 if ($id) {
-    $sql = "UPDATE books SET title='$title', author='$author', year='$year', status='$status', call_no='$call_no', genre_id='$genre' WHERE id=$id";
+    // Use prepared statements to prevent SQL injection and errors
+    $stmt = $conn->prepare("UPDATE books SET title=?, author=?, year=?, status=?, call_no=?, genre_id=? WHERE id=?");
+    $stmt->bind_param("ssssssi", $title, $author, $year, $status, $call_no, $genre, $id);
     
-    if ($status === 'Borrowed') {
-        $approve_sql = "UPDATE borrow_requests SET status='Approved' WHERE book_id=$id AND status='Pending' ORDER BY id ASC LIMIT 1";
-        mysqli_query($conn, $approve_sql);
+    if ($stmt->execute()) {
+        // If status is changed to Borrowed, make sure there is a borrow request
+        if ($status === 'Borrowed') {
+            // Check if an approved request exists
+            $check = $conn->prepare("SELECT id FROM borrow_requests WHERE book_id=? AND status='Approved'");
+            $check->bind_param("i", $id);
+            $check->execute();
+            $check->store_result();
+            
+            if ($check->num_rows == 0) {
+                // If no approved request exists, check for a pending one and approve it
+                $approve_sql = "UPDATE borrow_requests SET status='Approved' WHERE book_id=? AND status='Pending' ORDER BY id ASC LIMIT 1";
+                $approve_stmt = $conn->prepare($approve_sql);
+                $approve_stmt->bind_param("i", $id);
+                $approve_stmt->execute();
+                $approve_stmt->close();
+            }
+            $check->close();
+        }
+        elseif ($status === 'Available') {
+            // If status is Available, mark the approved request as Returned
+            $return_sql = "UPDATE borrow_requests SET status='Returned' WHERE book_id=? AND status='Approved' ORDER BY id DESC LIMIT 1";
+            $return_stmt = $conn->prepare($return_sql);
+            $return_stmt->bind_param("i", $id);
+            $return_stmt->execute();
+            $return_stmt->close();
+        }
+        
+        echo json_encode(["success" => true]);
+    } else {
+        echo json_encode(["success" => false, "error" => $stmt->error]);
     }
-    elseif ($status === 'Available') {
-        $return_sql = "UPDATE borrow_requests SET status='Returned' WHERE book_id=$id AND status='Approved' ORDER BY id DESC LIMIT 1";
-        mysqli_query($conn, $return_sql);
-    }
+    $stmt->close();
 } else {
-    $sql = "INSERT INTO books (title, author, year, status, call_no, genre_id) VALUES ('$title', '$author', '$year', '$status', '$call_no', '$genre')";
+    // Insert new book
+    $stmt = $conn->prepare("INSERT INTO books (title, author, year, status, call_no, genre_id) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("ssssss", $title, $author, $year, $status, $call_no, $genre);
+    
+    if ($stmt->execute()) {
+        echo json_encode(["success" => true]);
+    } else {
+        echo json_encode(["success" => false, "error" => $stmt->error]);
+    }
+    $stmt->close();
 }
 
-if (mysqli_query($conn, $sql)) {
-    echo json_encode(["success" => true]);
-} else {
-    echo json_encode(["success" => false, "error" => mysqli_error($conn)]);
-}
+$conn->close();
 ?>

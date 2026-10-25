@@ -1,21 +1,11 @@
 <?php
-// Prevent the browser from caching the page so the "Back" button doesn't show it after logout
-header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-header("Cache-Control: post-check=0, pre-check=0", false);
-header("Pragma: no-cache");
-
 session_start();
-// If the user is not logged in, kick them back to the landing page
 if (!isset($_SESSION['user_id'])) {
+    // Redirect back to landing page if not logged in
     header("Location: ../landing-page/landing.html");
     exit;
 }
-
-// Get the user's full name from the session and split it to get just the first name
-$fullName = $_SESSION['user_name'] ?? 'Reader';
-$nameParts = explode(' ', trim($fullName));
-$firstName = $nameParts[0]; 
-
+$firstName = $_SESSION['user_name'] ?? 'User';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -344,10 +334,15 @@ $firstName = $nameParts[0];
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>1. Books must be returned within 2 months of the borrow date.</p>
-                <p>2. Late returns will incur a fine.</p>
-                <p>3. Damaged books must be reported immediately.</p>
-                <p>4. The borrower is responsible for the book while it is in their possession.</p>
+                <p>By submitting a borrow request, you agree to the following conditions:</p>
+                <ol>
+                    <li class="mb-2">A borrow request must include a borrow date and a return date.</li>
+                    <li class="mb-2">The return date must not be earlier than the borrow date and must be within two months of it.</li>
+                    <li class="mb-2">A request is subject to librarian confirmation. The book is not considered borrowed until the request is approved.</li>
+                    <li class="mb-2">Books must be returned by the agreed return date. Late returns incur a fine that is determined by the price of the book.</li>
+                    <li class="mb-2">The borrower is responsible for the book while it is in their possession and must report damage or loss immediately.</li>
+                    <li>Damaged or missing books may result in a liability equal to the listed price of the book.</li>
+                </ol>
             </div>
             <div class="modal-footer justify-content-center">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

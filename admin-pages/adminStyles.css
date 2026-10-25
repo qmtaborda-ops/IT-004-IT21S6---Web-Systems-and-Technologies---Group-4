@@ -56,6 +56,57 @@ body {
   font-style: italic;
 }
 
+/* --- Admin Dropdown Menu Styling --- */
+.library-user-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  color: inherit;
+  font: inherit;
+  font-style: italic;
+  cursor: pointer;
+}
+
+.library-user-btn:hover,
+.library-user-btn:focus-visible,
+.library-user-btn.show { 
+  color: #fff3c4; 
+  outline: none; 
+}
+
+.library-user-btn:focus-visible i { 
+  box-shadow: 0 0 0 3px rgba(227, 197, 101, 0.3); 
+  border-radius: 50%; 
+}
+
+.account-menu {
+  min-width: 180px;
+  background: #f2e8d0;
+  border: 1px solid #c9a227;
+  border-radius: 6px;
+  padding: 4px 0;
+  font-family: 'Playfair Display', serif;
+  font-style: normal;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+}
+
+.account-menu .dropdown-item {
+  font-style: normal;
+  color: #2e2418;
+  padding: 10px 16px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.account-menu .dropdown-item:hover,
+.account-menu .dropdown-item:focus { 
+  background: rgba(201, 162, 39, 0.25); 
+  color: #2e2418; 
+}
+
 .library-user-search {
   display: flex;
   flex-direction: row-reverse;

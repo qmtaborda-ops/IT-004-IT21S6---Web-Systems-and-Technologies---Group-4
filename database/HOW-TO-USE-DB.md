@@ -67,9 +67,46 @@ CREATE TABLE IF NOT EXISTS borrow_requests (
 );
 ```
 
-Create an admin account with a password string:
+Generate a password hash using PHP's `password_hash()` method (the same method used for user signups). Open the shell or terminal provided by your XAMPP distribution and run:
+
+```sh
+php -r "echo password_hash('your-password', PASSWORD_DEFAULT), PHP_EOL;"
+```
+
+If `php` is not recognized, run the bundled PHP CLI executable from your XAMPP installation (`php.exe` or `php`, depending on your system). Its location varies by XAMPP distribution; use that executable in place of `php` in the command above.
+
+Common Windows locations are:
+
+```text
+C:\xampp\php\php.exe
+C:\Program Files\xampp\php\php.exe
+```
+
+For example, in Windows Command Prompt, use:
+
+```bat
+"C:\xampp\php\php.exe" -r "echo password_hash('your-password', PASSWORD_DEFAULT), PHP_EOL;"
+```
+
+In PowerShell, prefix the quoted executable path with `&`:
+
+```powershell
+& "C:\xampp\php\php.exe" -r "echo password_hash('your-password', PASSWORD_DEFAULT), PHP_EOL;"
+```
+
+Replace `C:\xampp\php\php.exe` with the path where your XAMPP distribution installed `php.exe`.
+
+Copy the generated hash into the database instead of storing the plain-text password:
 
 ```sql
 INSERT INTO admins (username, password)
-VALUES ('your-admin-name', 'your-password');
+VALUES ('your-admin-name', 'paste-generated-hash-here');
+```
+
+For an existing admin account, update its password column with a generated hash:
+
+```sql
+UPDATE admins
+SET password = 'paste-generated-hash-here'
+WHERE username = 'your-admin-name';
 ```

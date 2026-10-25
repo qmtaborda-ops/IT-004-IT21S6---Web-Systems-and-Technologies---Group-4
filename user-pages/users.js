@@ -99,6 +99,65 @@ function updateEmptyMessage(pane) {
     message.style.display = rows.length === 0 ? "block" : "none";
 }
 
+let bookCache = {};
+
+function escapeHtml(value) {
+    const div = document.createElement('div');
+    div.textContent = value == null ? '' : String(value);
+    return div.innerHTML;
+}
+
+// Open the book details modal (cover, author, overview) when a title is clicked
+let detailsBookId = null;
+
+document.addEventListener('click', function (event) {
+    const link = event.target.closest('.book-details-link');
+    if (!link) return;
+    event.preventDefault();
+    const book = bookCache[link.dataset.id];
+    if (!book) return;
+    detailsBookId = String(book.id);
+
+    document.getElementById('detailsTitle').textContent = book.title;
+    document.getElementById('detailsAuthor').textContent = book.author;
+    document.getElementById('detailsYear').textContent = book.year;
+    document.getElementById('detailsCall').textContent = book.call_no;
+    document.getElementById('detailsDescription').textContent =
+        book.description && book.description.trim() ? book.description : 'No description available for this book.';
+
+    const statusEl = document.getElementById('detailsStatus');
+    statusEl.textContent = book.status;
+    statusEl.className = 'book-status book-status-' + book.status.toLowerCase().replace(/\s+/g, '');
+
+    const img = document.getElementById('detailsCover');
+    const placeholder = document.getElementById('detailsNoCover');
+    if (book.cover_hash) {
+        img.src = API_URL + 'get_cover.php?id=' + book.id + '&v=' + book.cover_hash;
+        img.style.display = 'inline-block';
+        placeholder.style.display = 'none';
+    } else {
+        img.style.display = 'none';
+        placeholder.style.display = 'flex';
+    }
+
+    document.getElementById('detailsBorrowWrap').style.display = book.status === 'Available' ? '' : 'none';
+    bootstrap.Modal.getOrCreateInstance(document.getElementById('detailsModal')).show();
+});
+
+// "Borrow this book" inside the details popup -> hand over to the normal borrow popup
+document.getElementById('detailsBorrowBtn').addEventListener('click', function () {
+    const book = bookCache[detailsBookId];
+    if (!book) return;
+    selectedBookId = String(book.id);
+    selectedBookTitle = book.title;
+    const detailsEl = document.getElementById('detailsModal');
+    detailsEl.addEventListener('hidden.bs.modal', function openBorrow() {
+        detailsEl.removeEventListener('hidden.bs.modal', openBorrow);
+        bootstrap.Modal.getOrCreateInstance(document.getElementById('borrowModal')).show();
+    });
+    bootstrap.Modal.getOrCreateInstance(detailsEl).hide();
+});
+
 async function loadUserBooks() {
     try {
         const res = await fetch(API_URL + 'get_books.php');
@@ -124,8 +183,12 @@ async function loadUserBooks() {
                     actionHtml = `<button class="btn btn-sm btn-success borrow-btn" data-id="${book.id}" data-bs-toggle="modal" data-bs-target="#borrowModal"><i class="bi bi-book"></i> Borrow</button>`;
                 }
 
+                const thumb = book.cover_hash
+                    ? `<img src="${API_URL}get_cover.php?id=${book.id}&v=${book.cover_hash}" alt="" style="height:40px;width:28px;object-fit:cover;border-radius:3px;margin-right:8px;vertical-align:middle;">`
+                    : '';
+
                 tr.innerHTML = `
-                    <td>${book.title}</td>
+                    <td>${thumb}<a href="#" class="book-details-link" data-id="${book.id}" style="color:inherit;font-weight:600;text-decoration:underline dotted;">${escapeHtml(book.title)}</a></td>
                     <td>${book.author}</td>
                     <td>${book.year}</td>
                     <td>${statusBadge}</td>
@@ -135,6 +198,9 @@ async function loadUserBooks() {
                 tbody.appendChild(tr);
             }
         });
+
+        bookCache = {};
+        books.forEach(b => { bookCache[String(b.id)] = b; });
 
         // Hide empty states for tabs that now have books (OUTSIDE THE LOOP)
         document.querySelectorAll(".tab-pane").forEach(updateEmptyMessage);

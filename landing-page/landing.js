@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost/library/';
+const API_URL = 'http://localhost/IT-004-IT21S6---Web-Systems-and-Technologies---Group-4/database/';
 
 $(document).ready(function () {
     const $navLinks = $('.navbar-nav .nav-link');
@@ -100,7 +100,7 @@ $(document).ready(function () {
             }
 
             if (action === 'login' || action === 'admin_login') {
-                const destination = action === 'admin_login' ? '../admin-pages/admin.html' : '../user-pages/users.html';
+                const destination = action === 'admin_login' ? '../admin-pages/admin.php' : '../user-pages/users.php';
                 window.location.href = destination;
                 return;
             }

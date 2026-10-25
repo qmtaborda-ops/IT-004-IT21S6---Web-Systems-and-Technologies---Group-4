@@ -1,12 +1,11 @@
 <?php
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS, DELETE, PUT");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 header('Content-Type: application/json');
 include 'connection.php';
 
 $data = json_decode(file_get_contents("php://input"), true);
-
 $id = $data['id'] ?? null;
 $title = $data['title'] ?? '';
 $author = $data['author'] ?? '';
@@ -23,12 +22,14 @@ if (empty(trim($title))) {
 if ($id) {
     $sql = "UPDATE books SET title='$title', author='$author', year='$year', status='$status', call_no='$call_no', genre_id='$genre' WHERE id=$id";
     
-    // If Admin sets status to Borrowed, approve the latest pending request
     if ($status === 'Borrowed') {
-        $approve_sql = "UPDATE borrow_requests SET status='Approved' WHERE book_id=$id AND status='Pending' ORDER BY id DESC LIMIT 1";
+        $approve_sql = "UPDATE borrow_requests SET status='Approved' WHERE book_id=$id AND status='Pending' ORDER BY id ASC LIMIT 1";
         mysqli_query($conn, $approve_sql);
     }
-
+    elseif ($status === 'Available') {
+        $return_sql = "UPDATE borrow_requests SET status='Returned' WHERE book_id=$id AND status='Approved' ORDER BY id DESC LIMIT 1";
+        mysqli_query($conn, $return_sql);
+    }
 } else {
     $sql = "INSERT INTO books (title, author, year, status, call_no, genre_id) VALUES ('$title', '$author', '$year', '$status', '$call_no', '$genre')";
 }

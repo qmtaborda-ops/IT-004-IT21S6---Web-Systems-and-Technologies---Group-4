@@ -28,6 +28,7 @@ $action = $data['action'] ?? '';
 $password = $data['password'] ?? '';
 
 if ($action === 'admin_login') {
+    // ... (keep your existing admin login logic here) ...
     $username = trim($data['username'] ?? '');
 
     if ($username === '' || $password === '') {
@@ -76,10 +77,14 @@ if ($action === 'signup') {
         exit;
     }
 
+    // Hash the password before saving it to the database!
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
     $statement = mysqli_prepare($conn, 'INSERT INTO users (first_name, last_name, email, password) VALUES (?, ?, ?, ?)');
-    mysqli_stmt_bind_param($statement, 'ssss', $firstName, $lastName, $email, $password);
+    mysqli_stmt_bind_param($statement, 'ssss', $firstName, $lastName, $email, $hashedPassword);
 
     if (mysqli_stmt_execute($statement)) {
+        // We do NOT start a session here, so they must log in manually.
         echo json_encode(['success' => true]);
     } else {
         http_response_code(mysqli_stmt_errno($statement) === 1062 ? 409 : 500);

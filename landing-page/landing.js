@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost/IT-004-IT21S6---Web-Systems-and-Technologies---Group-4/database/';
+const API_URL = '../database/';
 
 $(document).ready(function () {
     const $navLinks = $('.navbar-nav .nav-link');

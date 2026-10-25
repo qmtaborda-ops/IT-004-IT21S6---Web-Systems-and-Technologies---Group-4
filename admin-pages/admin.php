@@ -1,6 +1,13 @@
+<?php
+session_start();
+// If the admin is not logged in, kick them back to the landing page
+if (!isset($_SESSION['admin_id'])) {
+    header("Location: ../landing-page/landing.html");
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

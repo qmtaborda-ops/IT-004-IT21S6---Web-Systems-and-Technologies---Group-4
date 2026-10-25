@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS genres (
     name VARCHAR(100) NOT NULL
 );
 
-INSERT INTO genres (id, name) VALUES
+INSERT IGNORE INTO genres (id, name) VALUES
 ('scifi', 'Sci-Fi & Cyberpunk'),
 ('fantasy', 'Fantasy & Supernatural'),
 ('action', 'Action, Adventure & Martial Arts'),
@@ -50,6 +50,9 @@ CREATE TABLE IF NOT EXISTS books (
     call_no VARCHAR(50) NOT NULL,
     genre_id VARCHAR(50) NOT NULL,
     is_hidden BOOLEAN DEFAULT 0,
+    description TEXT NULL,
+    cover_image MEDIUMBLOB NULL,
+    cover_type VARCHAR(50) NULL,
     FOREIGN KEY (genre_id) REFERENCES genres(id)
 );
 
@@ -65,7 +68,34 @@ CREATE TABLE IF NOT EXISTS borrow_requests (
     FOREIGN KEY (book_id) REFERENCES books(id),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
 );
+
+-- 6. UPGRADE FOR EXISTING DATABASES (book description + cover image)
+-- Skips automatically if the columns already exist, so it is safe to run this whole script again.
+SET @s = IF((SELECT COUNT(*) FROM information_schema.COLUMNS
+             WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'books' AND COLUMN_NAME = 'description') = 0,
+            'ALTER TABLE books ADD COLUMN description TEXT NULL', 'SELECT 1');
+PREPARE st FROM @s; EXECUTE st; DEALLOCATE PREPARE st;
+
+SET @s = IF((SELECT COUNT(*) FROM information_schema.COLUMNS
+             WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'books' AND COLUMN_NAME = 'cover_image'
+               AND DATA_TYPE <> 'mediumblob') > 0,
+            'ALTER TABLE books DROP COLUMN cover_image', 'SELECT 1');
+PREPARE st FROM @s; EXECUTE st; DEALLOCATE PREPARE st;
+
+SET @s = IF((SELECT COUNT(*) FROM information_schema.COLUMNS
+             WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'books' AND COLUMN_NAME = 'cover_image') = 0,
+            'ALTER TABLE books ADD COLUMN cover_image MEDIUMBLOB NULL', 'SELECT 1');
+PREPARE st FROM @s; EXECUTE st; DEALLOCATE PREPARE st;
+
+SET @s = IF((SELECT COUNT(*) FROM information_schema.COLUMNS
+             WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'books' AND COLUMN_NAME = 'cover_type') = 0,
+            'ALTER TABLE books ADD COLUMN cover_type VARCHAR(50) NULL', 'SELECT 1');
+PREPARE st FROM @s; EXECUTE st; DEALLOCATE PREPARE st;
 ```
+
+> Everyone (new or existing database) just pastes and runs the SQL above - no separate file needed.
+> It creates anything missing and upgrades older databases. Cover images are stored inside the database
+> (max 800KB, admin upload only), so exporting/importing `library_db` also carries the images.
 
 Generate a password hash using PHP's `password_hash()` method (the same method used for user signups). Open the shell or terminal provided by your XAMPP distribution and run:
 

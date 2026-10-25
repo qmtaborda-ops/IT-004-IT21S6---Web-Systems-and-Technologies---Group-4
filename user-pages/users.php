@@ -281,6 +281,55 @@ $firstName = $_SESSION['user_name'] ?? 'User';
             <span>Booker's Club · Group 4 prototype</span>
         </div>
         <!-- De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S -->
+  <!-- Book details modal (cover image, author, overview) -->
+  <div class="modal fade" id="detailsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Book details</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-4">
+            <div class="col-md-5 text-center">
+              <img id="detailsCover" alt="Book cover"
+                   style="display:none; max-width:100%; max-height:420px; border-radius:6px; box-shadow:0 4px 14px rgba(0,0,0,.25);">
+              <div id="detailsNoCover" class="text-muted border rounded"
+                   style="display:none; height:320px; align-items:center; justify-content:center; flex-direction:column;">
+                <i class="bi bi-book" style="font-size:3rem;"></i>
+                <span>No cover image</span>
+              </div>
+            </div>
+            <div class="col-md-7">
+              <span id="detailsStatus" class="book-status"></span>
+              <h3 id="detailsTitle" class="mt-2 mb-1"></h3>
+              <p class="mb-3">by <span id="detailsAuthor"></span></p>
+
+              <h6 class="text-uppercase" style="letter-spacing:.06em;">Overview</h6>
+              <p id="detailsDescription" style="white-space:pre-line;"></p>
+
+              <hr>
+              <div class="row g-2">
+                <div class="col-6">
+                  <small class="text-muted text-uppercase">Year</small>
+                  <div id="detailsYear"></div>
+                </div>
+                <div class="col-6">
+                  <small class="text-muted text-uppercase">Book No.</small>
+                  <div id="detailsCall"></div>
+                </div>
+              </div>
+
+              <div id="detailsBorrowWrap" class="mt-4" style="display:none;">
+                <button type="button" class="btn btn-success" id="detailsBorrowBtn"><i class="bi bi-book"></i> Borrow this book</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="modal fade" id="borrowModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog" role="dialog" aria-labelledby="borrowModalLabel" aria-modal="true">
         <div class="modal-content">

@@ -1,4 +1,6 @@
 <?php
+session_start(); // MUST BE AT THE VERY TOP
+
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
@@ -27,8 +29,8 @@ $data = json_decode(file_get_contents('php://input'), true) ?? [];
 $action = $data['action'] ?? '';
 $password = $data['password'] ?? '';
 
+// ADMIN LOGIN
 if ($action === 'admin_login') {
-    // ... (keep your existing admin login logic here) ...
     $username = trim($data['username'] ?? '');
 
     if ($username === '' || $password === '') {
@@ -50,15 +52,14 @@ if ($action === 'admin_login') {
         exit;
     }
 
-    session_start();
-    session_regenerate_id(true);
-    unset($_SESSION['user_id'], $_SESSION['user_name']);
     $_SESSION['admin_id'] = $admin['id'];
     $_SESSION['admin_username'] = $admin['username'];
+    
     echo json_encode(['success' => true]);
     exit;
 }
 
+// USER SIGNUP
 $email = trim($data['email'] ?? '');
 if (!in_array($action, ['login', 'signup'], true) || !filter_var($email, FILTER_VALIDATE_EMAIL) || $password === '') {
     http_response_code(400);
@@ -94,7 +95,7 @@ if ($action === 'signup') {
     mysqli_stmt_close($statement);
     exit;
 }
-
+// USER LOGIN
 if ($action === 'login') {
     $statement = mysqli_prepare($conn, 'SELECT id, first_name, last_name, password FROM users WHERE email = ?');
     mysqli_stmt_bind_param($statement, 's', $email);
@@ -109,11 +110,10 @@ if ($action === 'login') {
         exit;
     }
 
-    session_start();
-    session_regenerate_id(true);
-    unset($_SESSION['admin_id'], $_SESSION['admin_username']);
+    // No unset(), no regenerate. Just set the user ID.
     $_SESSION['user_id'] = $user['id'];
     $_SESSION['user_name'] = $user['first_name'] . ' ' . $user['last_name'];
+    
     echo json_encode(['success' => true]);
     exit;
 }

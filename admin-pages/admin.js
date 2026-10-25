@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost/IT-004-IT21S6---Web-Systems-and-Technologies---Group-4/database/';
+const API_URL = '../database/';
 let currentPane = null;   
 let editingRow = null;   
 
@@ -53,7 +53,7 @@ function makeRow(book) {
 // Read: Fetch books from PHP backend
 async function loadBooks() {
   try {
-    const res = await fetch(API_URL + 'get_books.php');
+    const res = await fetch(API_URL + 'get_books.php?t=' + new Date().getTime());
     const books = await res.json();
 
     // Clear existing static HTML rows

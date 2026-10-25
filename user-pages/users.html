@@ -1,3 +1,22 @@
+<?php
+// Prevent the browser from caching the page so the "Back" button doesn't show it after logout
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
+session_start();
+// If the user is not logged in, kick them back to the landing page
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../landing-page/landing.html");
+    exit;
+}
+
+// Get the user's full name from the session and split it to get just the first name
+$fullName = $_SESSION['user_name'] ?? 'Reader';
+$nameParts = explode(' ', trim($fullName));
+$firstName = $nameParts[0]; 
+
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -29,7 +48,7 @@
             <div class="library-user-tools">
                 <div class="library-user-greeting dropdown">
                     <button type="button" class="library-user-btn" id="userMenuBtn" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Open account menu">
-                        <span>Have a good day, readers.</span>
+                        <span>Have a good day, <?php echo htmlspecialchars($firstName); ?>.</span>
                         <i class="bi bi-person-circle"></i>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end account-menu" aria-labelledby="userMenuBtn">
@@ -37,7 +56,7 @@
                         <li><button type="button" class="dropdown-item" data-open-view="history"><i class="bi bi-clock-history me-2"></i>Borrowed History</button></li>
                         <li><button type="button" class="dropdown-item" data-open-view="liabilities"><i class="bi bi-cash-coin me-2"></i>Liabilities</button></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="../Landing/landing.html"><i class="bi bi-box-arrow-right me-2"></i>Log Out</a></li>
+                        <li><a class="dropdown-item" href="../database/log_out.php"><i class="bi bi-box-arrow-right me-2"></i>Log Out</a></li>
                     </ul>
                 </div>
 
@@ -89,62 +108,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr> <!-- De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S -->
-                                <td>Neon Requiem</td>
-                                <td>K. Vasquez</td>
-                                <td>2022</td>
-                                <td><span class="book-status book-status-available">Available</span></td>
-                                <td>001</td>
-                                <td class="text-center">
-                                <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#borrowModal">
-                                <i class="bi bi-book"></i> Borrow
-                                </button> 
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Synthwave Horizon</td>
-                                <td>J. Park</td>
-                                <td>2021</td>
-                                <td><span class="book-status book-status-borrowed">Borrowed</span></td>
-                                <td>002</td>
-                                <td class="text-center"></td>
-                            </tr>
-                            <tr> <!-- De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S -->
-                                <td>Digital Alchemy</td>
-                                <td>R. Chen</td>
-                                <td>2023</td>
-                                <td><span class="book-status book-status-inprocess">In Process</span></td>
-                                <td>003</td>
-                                <td class="text-center"></td>
-                            </tr>
-                            <tr>
-                                <td>Chrome Lotus</td>
-                                <td>A. Iwata</td>
-                                <td>2020</td>
-                                <td><span class="book-status book-status-missing">Missing</span></td>
-                                <td>004</td>
-                                <td class="text-center"></td>
-                            </tr>
-                            <tr> <!-- De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S -->
-                                <td>Quantum Thief</td>
-                                <td>M. Rajaniemi</td>
-                                <td>2019</td>
-                                <td><span class="book-status book-status-damaged">Damaged</span></td>
-                                <td>005</td>
-                                <td class="text-center"></td>
-                            </tr>
-                            <tr>
-                                <td>The Codebreakers</td>
-                                <td>A. Turing</td>
-                                <td>2024</td>
-                                <td><span class="book-status book-status-available">Available</span></td>
-                                <td>006</td>
-                                <td class="text-center">
-                                <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#borrowModal">
-                                <i class="bi bi-book"></i> Borrow
-                                </button>  <!-- De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S -->
-                                </td>
-                            </tr>
+                            <!-- Data will be loaded dynamically via users.js -->
                         </tbody>
                     </table>
                 </div>
@@ -161,6 +125,7 @@
                                 <th>Year</th>
                                 <th>Status</th>
                                 <th>Book No.</th>
+                                <th class="text-center">Borrow</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -186,6 +151,7 @@
                                 <th>Year</th>
                                 <th>Status</th>
                                 <th>Book No.</th>
+                                <th class="text-center">Borrow</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -211,6 +177,7 @@
                                 <th>Year</th>
                                 <th>Status</th>
                                 <th>Book No.</th>
+                                <th class="text-center">Borrow</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -236,6 +203,7 @@
                                 <th>Year</th>
                                 <th>Status</th>
                                 <th>Book No.</th>
+                                <th class="text-center">Borrow</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -261,6 +229,7 @@
                                 <th>Year</th>
                                 <th>Status</th>
                                 <th>Book No.</th>
+                                <th class="text-center">Borrow</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -328,30 +297,34 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
 <!-- De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S -->
+        
+        <!-- UPDATED TERMS AND CONDITIONS MODAL -->
         <div class="modal fade" id="termsModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable" role="dialog" aria-labelledby="termsModalLabel" aria-modal="true">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title fs-5" id="termsModalLabel">Terms and Conditions</h2>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>By submitting a borrow request, you agree to the following conditions:</p>
-                <ol>
-                    <li class="mb-2">A borrow request must include a borrow date and a return date.</li>
-                    <li class="mb-2">The return date must not be earlier than the borrow date and must be within two months of it.</li>
-                    <li class="mb-2">A request is subject to librarian confirmation. The book is not considered borrowed until the request is approved.</li>
-                    <li class="mb-2">Books must be returned by the agreed return date. Late returns incur a fine that is determined by the price of the book.</li>
-                    <li class="mb-2">The borrower is responsible for the book while it is in their possession and must report damage or loss immediately.</li>
-                    <li>Damaged or missing books may result in a liability equal to the listed price of the book.</li>
-                </ol>
-            </div>
-            <div class="modal-footer justify-content-center">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <div class="modal-dialog modal-dialog-scrollable" role="dialog" aria-labelledby="termsModalLabel" aria-modal="true">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title fs-5" id="termsModalLabel">Terms and Conditions</h2>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>By submitting a borrow request, you agree to the following conditions:</p>
+                        <ol>
+                            <li class="mb-2">A borrow request must include a borrow date and a return date.</li>
+                            <li class="mb-2">The return date must not be earlier than the borrow date and must be within two months of it.</li>
+                            <li class="mb-2">A request is subject to librarian confirmation. The book is not considered borrowed until the request is approved.</li>
+                            <li class="mb-2">Books must be returned by the agreed return date. Late returns incur a fine that is determined by the price of the book.</li>
+                            <li class="mb-2">The borrower is responsible for the book while it is in their possession and must report damage or loss immediately.</li>
+                            <li>Damaged or missing books may result in a liability equal to the listed price of the book.</li>
+                        </ol>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-        </div>
+        <!-- END TERMS AND CONDITIONS MODAL -->
+
         <!-- De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S -->
         <!--  ACCOUNT MODAL  -->
         <div class="modal fade" id="accountModal" tabindex="-1" aria-labelledby="accountModalLabel" aria-hidden="true">
@@ -436,7 +409,7 @@
                     </div>
         <!-- De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S -->
                     <div class="modal-footer justify-content-between">
-                        <a href="../Landing/landing.html" class="btn btn-success"><i class="bi bi-box-arrow-right me-1"></i>Log Out</a>
+                        <a href="../database/log_out.php" class="btn btn-success"><i class="bi bi-box-arrow-right me-1"></i>Log Out</a>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     </div>
                 </div>

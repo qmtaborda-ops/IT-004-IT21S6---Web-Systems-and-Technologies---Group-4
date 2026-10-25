@@ -232,6 +232,79 @@ body {
     vertical-align: top;
 }
 
+.table tbody td.library-empty-state-cell {
+    padding: 0;
+    vertical-align: middle;
+}
+
+.table tbody tr.library-empty-state-row td:first-child {
+    border-right: 4px solid #5b3d29;
+}
+
+.table tbody tr.library-empty-state-row td:nth-child(2) {
+    border-right: 0;
+}
+
+.table tbody tr.library-empty-state-row:hover {
+    background: transparent;
+}
+
+.table tbody td.catalog-see-more-cell {
+    padding: 0;
+    background-color: #fff;
+    background-image: linear-gradient(
+        to right,
+        transparent calc(50% - 2px),
+        #5b3d29 calc(50% - 2px),
+        #5b3d29 calc(50% + 2px),
+        transparent calc(50% + 2px)
+    );
+    vertical-align: middle;
+}
+
+.catalog-see-more {
+    display: grid;
+    width: 100%;
+    min-height: 42px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    padding: 10px;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: center;
+    cursor: pointer;
+}
+
+.catalog-see-more span {
+    padding: 0 8px;
+    color: #5b3d29;
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-color: #c9a227;
+    text-underline-offset: 4px;
+}
+
+.catalog-see-more span:last-child i {
+    margin-left: 0.35rem;
+    color: #8d6a3b;
+    -webkit-text-stroke: 0.7px currentColor;
+}
+
+.catalog-see-more:hover,
+.catalog-see-more:focus-visible {
+    color: #8d6a3b;
+    text-decoration: underline;
+    text-decoration-color: #c9a227;
+    text-underline-offset: 3px;
+}
+
+.catalog-see-more:focus-visible {
+    outline: 2px solid #c9a227;
+    outline-offset: 2px;
+}
+
 .table tbody tr:hover {
     background: #c9a2271f;
 }
@@ -243,13 +316,18 @@ body {
 
 .library-empty-state {
     text-align: center;
-    padding: 40px 20px;
+    display: flex;
+    min-height: 280px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 20px;
     color: #6b5a45;
 }
 
 .library-empty-state i {
     display: block;
-    font-size: 30px;
+    font-size: 34px;
     color: #c9a227;
     margin-bottom: 8px;
 }

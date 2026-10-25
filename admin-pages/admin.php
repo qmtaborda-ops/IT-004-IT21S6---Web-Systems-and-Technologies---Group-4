@@ -310,6 +310,20 @@ if (!isset($_SESSION['admin_id'])) {
                     <label class="form-label" for="addCall">Call no.</label>
                     <input class="form-control mb-2" id="addCall" required>
 
+                    <label class="form-label" for="addDescription">Description</label>
+                    <textarea class="form-control mb-2" id="addDescription" rows="4"
+                        placeholder="Short summary / synopsis of the book"></textarea>
+
+                    <label class="form-label" for="addCover">Cover image <small class="text-muted">(JPG, PNG, WEBP or GIF, max 800KB)</small></label>
+                    <input type="file" class="form-control mb-2" id="addCover" accept="image/jpeg,image/png,image/webp,image/gif">
+                    <div id="coverPreviewWrap" class="mb-2" style="display:none;">
+                        <img id="coverPreview" alt="Cover preview" style="max-height:140px; border-radius:6px; border:1px solid #ddd;">
+                        <div class="form-check mt-1" id="removeCoverWrap" style="display:none;">
+                            <input class="form-check-input" type="checkbox" id="removeCover">
+                            <label class="form-check-label" for="removeCover">Remove current image</label>
+                        </div>
+                    </div>
+
                     <label class="form-label" for="addGenre">Genre</label>
                     <select class="form-select mb-2" id="addGenre">
                         <option value="scifi">Sci-Fi &amp; Cyberpunk</option>

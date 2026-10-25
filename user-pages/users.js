@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
+    /* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
     const termsCheck = document.getElementById('termsCheck');
     const confirmBtn = document.getElementById('confirmBorrowBtn');
     const borrowDateInput = document.getElementById('borrowDate');
@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
     termsCheck.addEventListener('change', function () {
         confirmBtn.disabled = !this.checked;
     });
-/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
+
     const today = new Date().toISOString().split('T')[0];
     borrowDateInput.setAttribute('min', today);
     returnDateInput.setAttribute('min', today);
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const maxReturn = new Date(borrow);
         maxReturn.setMonth(maxReturn.getMonth() + 2);
-/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
+
         const defaultStr = defaultReturn.toISOString().split('T')[0];
         const maxStr = maxReturn.toISOString().split('T')[0];
 
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         returnDateInput.dispatchEvent(new Event('change'));
     });
-/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
+
     returnDateInput.addEventListener('change', function () {
         const borrowVal = borrowDateInput.value;
         const returnVal = this.value;
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const borrow = new Date(borrowVal);
         const ret = new Date(returnVal);
         const diffDays = Math.ceil((ret - borrow) / (1000 * 60 * 60 * 24));
-/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
+
         if (ret < borrow) {
             dateError.textContent = "Return date cannot be earlier than the borrow date.";
             dateError.style.display = 'block';
@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function () {
             dateError.style.display = 'none';
         }
     });
-/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
+
     confirmBtn.addEventListener('click', function () {
         if (!borrowDateInput.value || !returnDateInput.value) {
             alert("Please select both dates.");
@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function () {
             alert("Please fix the date errors.");
             return;
         }
-/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
+
         notification.style.display = 'block';
         window.scrollTo({ top: 0, behavior: 'smooth' });
 
@@ -86,26 +86,36 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 });
-/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
-const API_URL = 'http://localhost/library/';
+
+const API_URL = 'http://localhost/IT-004-IT21S6---Web-Systems-and-Technologies---Group-4/database/';
 let selectedBookId = null;
 let selectedBookTitle = '';
+
+// Helper function to hide/show the empty messages
+function updateEmptyMessage(pane) {
+    const message = pane.querySelector(".library-empty-state");
+    if (!message) return;
+    const rows = pane.querySelectorAll("tbody tr");
+    message.style.display = rows.length === 0 ? "block" : "none";
+}
 
 async function loadUserBooks() {
     try {
         const res = await fetch(API_URL + 'get_books.php');
         const books = await res.json();
 
+        // Clear existing rows
         document.querySelectorAll(".tab-pane tbody").forEach(tbody => tbody.innerHTML = "");
 
         books.forEach(book => {
-            if (book.is_hidden == 1) return; 
+            if (book.is_hidden == 1) return;
 
             const pane = document.getElementById(book.genre_id);
             if (pane) {
                 const tbody = pane.querySelector("tbody");
                 const tr = document.createElement("tr");
-/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
+
+                // Simplified status logic (Ready for future copies update)
                 const statusTag = book.status.toLowerCase().replace(/\s+/g, "");
                 const statusBadge = `<span class='book-status book-status-${statusTag}'>${book.status}</span>`;
 
@@ -125,16 +135,20 @@ async function loadUserBooks() {
                 tbody.appendChild(tr);
             }
         });
-/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
+
+        // Hide empty states for tabs that now have books (OUTSIDE THE LOOP)
+        document.querySelectorAll(".tab-pane").forEach(updateEmptyMessage);
+
+        // Attach click events to the new borrow buttons
         document.querySelectorAll('.borrow-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
+            btn.addEventListener('click', function () {
                 selectedBookId = this.getAttribute('data-id');
                 selectedBookTitle = this.closest('tr').querySelector('td').textContent.trim();
             });
         });
 
     } catch (err) {
-        console.error(err);
+        console.error("Error loading books:", err);
     }
 }
 
@@ -145,38 +159,60 @@ document.getElementById('confirmBorrowBtn').addEventListener('click', async func
     const returnDateInput = document.getElementById('returnDate');
     const termsCheck = document.getElementById('termsCheck');
     const dateError = document.getElementById('dateError');
+    const notification = document.getElementById('borrowNotification');
+    const borrowForm = document.getElementById('borrowForm');
+    const borrowModal = document.getElementById('borrowModal');
 
     if (!borrowDateInput.value || !returnDateInput.value || !termsCheck.checked || dateError.style.display === 'block') {
-        return; 
+        return;
     }
-/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
+
     if (selectedBookId) {
         try {
             const borrowedOn = borrowDateInput.value;
             const dueOn = returnDateInput.value;
             const bookId = selectedBookId;
             const bookTitle = selectedBookTitle;
+
             const borrowRes = await fetch(API_URL + 'borrow_book.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
                 body: JSON.stringify({
                     book_id: selectedBookId,
                     borrow_date: borrowDateInput.value,
                     return_date: returnDateInput.value
                 })
             });
-            if (borrowRes.ok) {
-                saveBorrowRecord(bookId, bookTitle, borrowedOn, dueOn);
-            }
 
-            loadUserBooks();
+            const result = await borrowRes.json();
+
+            if (result.success) {
+                notification.style.display = 'block';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+
+                borrowForm.reset();
+                this.disabled = true;
+                dateError.style.display = 'none';
+
+                saveBorrowRecord(bookId, bookTitle, borrowedOn, dueOn);
+
+                const modalInstance = bootstrap.Modal.getInstance(borrowModal);
+                modalInstance.hide();
+
+                loadUserBooks();
+            } else {
+                alert("Error: " + result.error);
+            }
         } catch (err) {
             console.error(err);
+            alert("Could not connect to the server.");
         }
     }
 });
-/* ---------- My Account modal (front-end only: no database changes) ---------- */
-const FINE_PER_DAY = 10;                      // pesos per day a book is overdue; change as needed
+
+/* ---------- My Account modal (front-end only) ---------- */
+const FINE_PER_DAY = 10;
 const BORROW_STORE_KEY = 'bookersClubBorrows';
 
 function loadBorrowRecords() {
@@ -186,7 +222,7 @@ function loadBorrowRecords() {
         return [];
     }
 }
-/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
+
 function storeBorrowRecords(records) {
     try {
         localStorage.setItem(BORROW_STORE_KEY, JSON.stringify(records));
@@ -211,7 +247,6 @@ function saveBorrowRecord(bookId, title, borrowDate, returnDate) {
     storeBorrowRecords(records);
 }
 
-/* Uses the book list the page already loads (get_books.php) to update each record */
 async function syncBorrowRecords() {
     const records = loadBorrowRecords();
     if (!records.some(function (r) { return !r.closed; })) return records;
@@ -221,7 +256,7 @@ async function syncBorrowRecords() {
         const books = await res.json();
         const byId = {};
         books.forEach(function (b) { byId[String(b.id)] = b; });
-/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
+
         records.forEach(function (r) {
             if (r.closed) return;
             const book = byId[r.book_id];
@@ -247,7 +282,7 @@ async function syncBorrowRecords() {
     }
     return records;
 }
-/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
+
 function escapeHtml(value) {
     const div = document.createElement('div');
     div.textContent = value == null ? '' : value;
@@ -271,15 +306,15 @@ function daysOverdue(returnDate) {
 
 function accountStatusClass(status) {
     switch ((status || '').toLowerCase()) {
-        case 'returned':   return 'book-status-available';
-        case 'borrowed':   return 'book-status-borrowed';
+        case 'returned': return 'book-status-available';
+        case 'borrowed': return 'book-status-borrowed';
         case 'in process': return 'book-status-inprocess';
         case 'overdue':
-        case 'missing':    return 'book-status-missing';
-        default:           return 'book-status-damaged';
+        case 'missing': return 'book-status-missing';
+        default: return 'book-status-damaged';
     }
 }
-/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
+
 function accountPill(status) {
     return '<span class="book-status ' + accountStatusClass(status) + '">' + escapeHtml(status) + '</span>';
 }
@@ -293,28 +328,25 @@ function renderAccount(records) {
     const current = records.filter(function (r) { return !r.closed; }).reverse();
     const history = records.filter(function (r) { return r.closed; }).reverse();
 
-    // Currently borrowing
     if (!current.length) {
         setAccountMessage('currentBorrowsBody', 4, 'You have no borrowed books right now');
     } else {
         document.getElementById('currentBorrowsBody').innerHTML = current.map(function (r) {
             const status = daysOverdue(r.return_date) > 0 && r.seenOut ? 'Overdue' : r.status;
             return '<tr><td>' + escapeHtml(r.title) + '</td><td>' + escapeHtml(r.borrow_date) +
-                   '</td><td>' + escapeHtml(r.return_date) + '</td><td>' + accountPill(status) + '</td></tr>';
+                '</td><td>' + escapeHtml(r.return_date) + '</td><td>' + accountPill(status) + '</td></tr>';
         }).join('');
     }
 
-    // History
     if (!history.length) {
         setAccountMessage('historyBody', 4, 'No borrowing history yet');
     } else {
         document.getElementById('historyBody').innerHTML = history.map(function (r) {
             return '<tr><td>' + escapeHtml(r.title) + '</td><td>' + escapeHtml(r.borrow_date) +
-                   '</td><td>' + escapeHtml(r.return_date) + '</td><td>' + accountPill(r.outcome) + '</td></tr>';
+                '</td><td>' + escapeHtml(r.return_date) + '</td><td>' + accountPill(r.outcome) + '</td></tr>';
         }).join('');
     }
 
-    // Liabilities: late fines (still out past due date) + price of damaged/missing books
     const liabilities = [];
     current.forEach(function (r) {
         const days = daysOverdue(r.return_date);
@@ -331,7 +363,7 @@ function renderAccount(records) {
             liabilities.push({ title: r.title, reason: r.outcome + ' book (price of book)', amount: r.price });
         }
     });
-/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
+
     let total = 0;
     if (!liabilities.length) {
         setAccountMessage('liabilitiesBody', 3, 'No outstanding liabilities');
@@ -339,7 +371,7 @@ function renderAccount(records) {
         document.getElementById('liabilitiesBody').innerHTML = liabilities.map(function (l) {
             if (l.amount != null) total += l.amount;
             return '<tr><td>' + escapeHtml(l.title) + '</td><td>' + escapeHtml(l.reason) +
-                   '</td><td class="text-end">' + (l.amount != null ? formatPeso(l.amount) : 'Price not set') + '</td></tr>';
+                '</td><td class="text-end">' + (l.amount != null ? formatPeso(l.amount) : 'Price not set') + '</td></tr>';
         }).join('');
     }
     document.getElementById('liabilitiesTotal').textContent = formatPeso(total);
@@ -349,7 +381,7 @@ const accountModal = document.getElementById('accountModal');
 const accountViews = { account: 'accountView', history: 'historyView', liabilities: 'liabilitiesView' };
 const accountTitles = { account: 'My Account', history: 'Borrowed History', liabilities: 'Liabilities' };
 let pendingAccountView = 'account';
-/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
+
 function showAccountView(name) {
     Object.keys(accountViews).forEach(function (key) {
         document.getElementById(accountViews[key]).classList.toggle('d-none', key !== name);
@@ -366,7 +398,7 @@ document.querySelectorAll('[data-open-view]').forEach(function (item) {
         bootstrap.Modal.getOrCreateInstance(accountModal).show();
     });
 });
-/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
+
 document.querySelectorAll('.account-menu-item').forEach(function (item) {
     item.addEventListener('click', function () {
         showAccountView(this.dataset.view);
@@ -376,7 +408,6 @@ document.querySelectorAll('.account-menu-item').forEach(function (item) {
 accountModal.addEventListener('show.bs.modal', async function () {
     showAccountView(pendingAccountView);
     pendingAccountView = 'account';
-    renderAccount(loadBorrowRecords());           // show what we have right away
-    renderAccount(await syncBorrowRecords());     // then refresh using the latest book statuses
+    renderAccount(loadBorrowRecords());
+    renderAccount(await syncBorrowRecords());
 });
-/* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */

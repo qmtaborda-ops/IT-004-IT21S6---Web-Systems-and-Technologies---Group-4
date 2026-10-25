@@ -30,9 +30,16 @@
                         </div>
                     </div>
                     <div class="library-user-tools">
-                        <div class="library-user-greeting">
-                            <span>Have a good day admin</span>
-                            <i class="bi bi-person-circle"></i>
+                        <div class="library-user-greeting dropdown">
+                            <button type="button" class="library-user-btn" id="adminMenuBtn" data-bs-toggle="dropdown"
+                                aria-expanded="false" aria-label="Open admin menu">
+                                <span>Have a good day admin</span>
+                                <i class="bi bi-person-circle"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end account-menu" aria-labelledby="adminMenuBtn">
+                                <li><a class="dropdown-item" href="../database/log_out.php"><i
+                                            class="bi bi-box-arrow-right me-2"></i>Log Out</a></li>
+                            </ul>
                         </div>
                         <div class="library-user-search">
                             <i class="bi bi-search"></i>
@@ -44,32 +51,38 @@
                 <!-- Genre Tabs Navigation -->
                 <ul class="nav nav-tabs mb-0" id="genreTabs" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="scifi-tab" data-bs-toggle="tab" data-bs-target="#scifi" type="button" role="tab" aria-controls="scifi" aria-selected="true">
+                        <button class="nav-link active" id="scifi-tab" data-bs-toggle="tab" data-bs-target="#scifi"
+                            type="button" role="tab" aria-controls="scifi" aria-selected="true">
                             Sci-Fi & Cyberpunk
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="fantasy-tab" data-bs-toggle="tab" data-bs-target="#fantasy" type="button" role="tab" aria-controls="fantasy" aria-selected="false">
+                        <button class="nav-link" id="fantasy-tab" data-bs-toggle="tab" data-bs-target="#fantasy"
+                            type="button" role="tab" aria-controls="fantasy" aria-selected="false">
                             Fantasy & Supernatural
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="action-tab" data-bs-toggle="tab" data-bs-target="#action" type="button" role="tab" aria-controls="action" aria-selected="false">
+                        <button class="nav-link" id="action-tab" data-bs-toggle="tab" data-bs-target="#action"
+                            type="button" role="tab" aria-controls="action" aria-selected="false">
                             Action, Adventure & Martial Arts
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="romance-tab" data-bs-toggle="tab" data-bs-target="#romance" type="button" role="tab" aria-controls="romance" aria-selected="false">
+                        <button class="nav-link" id="romance-tab" data-bs-toggle="tab" data-bs-target="#romance"
+                            type="button" role="tab" aria-controls="romance" aria-selected="false">
                             Romance & Drama
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="mystery-tab" data-bs-toggle="tab" data-bs-target="#mystery" type="button" role="tab" aria-controls="mystery" aria-selected="false">
+                        <button class="nav-link" id="mystery-tab" data-bs-toggle="tab" data-bs-target="#mystery"
+                            type="button" role="tab" aria-controls="mystery" aria-selected="false">
                             Mystery, Horror & Psychological
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="academics-tab" data-bs-toggle="tab" data-bs-target="#academics" type="button" role="tab" aria-controls="academics" aria-selected="false">
+                        <button class="nav-link" id="academics-tab" data-bs-toggle="tab" data-bs-target="#academics"
+                            type="button" role="tab" aria-controls="academics" aria-selected="false">
                             Academics, Non-Fiction & Skill Building
                         </button>
                     </li>

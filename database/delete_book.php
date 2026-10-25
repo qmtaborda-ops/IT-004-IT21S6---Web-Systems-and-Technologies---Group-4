@@ -10,6 +10,13 @@ if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
 }
 
 header("Content-Type: application/json");
+session_start();
+// Only a logged-in admin may add/edit/delete books or upload cover images
+if (empty($_SESSION['admin_id'])) {
+    http_response_code(403);
+    echo json_encode(["success" => false, "error" => "Admin login required."]);
+    exit;
+}
 require __DIR__ . "/connection.php";
 
 $data = json_decode(file_get_contents("php://input"), true);

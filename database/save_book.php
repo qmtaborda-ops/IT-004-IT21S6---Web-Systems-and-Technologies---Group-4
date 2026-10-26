@@ -42,28 +42,15 @@ if (empty(trim($title))) {
 }
 
 if ($id) {
-    // 1. If Admin clicks "Return Book" (sends Available status)
-    if ($status === 'Available') {
-        // Find the most recent approved request for this book
-        $ret_stmt = $conn->prepare("SELECT id, quantity FROM borrow_requests WHERE book_id=? AND status='Approved' ORDER BY id DESC LIMIT 1");
-        $ret_stmt->bind_param("i", $id);
-        $ret_stmt->execute();
-        $ret = $ret_stmt->get_result()->fetch_assoc();
-        $ret_stmt->close();
+    // Fetch current status
+    $check_stmt = $conn->prepare("SELECT status FROM books WHERE id = ?");
+    $check_stmt->bind_param("i", $id);
+    $check_stmt->execute();
+    $current_book = $check_stmt->get_result()->fetch_assoc();
+    $check_stmt->close();
 
-        if ($ret) {
-            // Add the stock back
-            $returned_amount = (int)$ret['quantity'];
-            $quantity = $quantity + $returned_amount;
-
-            // Mark the request as returned
-            $req_id = $ret['id'];
-            $conn->query("UPDATE borrow_requests SET status='Returned' WHERE id=$req_id");
-        }
-    }
-
-    // 2. If Admin manually sets status to Borrowed, drop the stock
-    if ($status === 'Borrowed') {
+    // If Admin clicks Borrowed, we approve the request and drop the stock
+    if ($status === 'Borrowed' && $current_book['status'] !== 'Borrowed') {
         $req_stmt = $conn->prepare("SELECT quantity FROM borrow_requests WHERE book_id=? AND status='Pending' ORDER BY id ASC LIMIT 1");
         $req_stmt->bind_param("i", $id);
         $req_stmt->execute();
@@ -80,12 +67,27 @@ if ($id) {
         $approve_stmt->close();
     }
 
-    // 3. Auto-set to Out of Stock if quantity is 0
-    if ($status !== 'Missing' && $status !== 'Damaged' && $status !== 'Borrowed' && $quantity <= 0) {
-        $status = 'Out of Stock';
+    // If Admin clicks Available, we return the book
+    if ($status === 'Available' && $current_book['status'] !== 'Available') {
+        $ret_stmt = $conn->prepare("SELECT quantity FROM borrow_requests WHERE book_id=? AND status='Approved' ORDER BY id DESC LIMIT 1");
+        $ret_stmt->bind_param("i", $id);
+        $ret_stmt->execute();
+        $ret = $ret_stmt->get_result()->fetch_assoc();
+        $ret_stmt->close();
+
+        if ($ret) {
+            $returned_amount = (int)$ret['quantity'];
+            $quantity = $quantity + $returned_amount;
+
+            // Mark request as Returned
+            $return_request_stmt = $conn->prepare("UPDATE borrow_requests SET status='Returned' WHERE book_id=? AND status='Approved' ORDER BY id DESC LIMIT 1");
+            $return_request_stmt->bind_param("i", $id);
+            $return_request_stmt->execute();
+            $return_request_stmt->close();
+        }
     }
 
-    // Save the book
+    // Save the book with exactly the status you selected
     $stmt = $conn->prepare("UPDATE books SET title=?, author=?, year=?, quantity=?, status=?, call_no=?, genre_id=?, description=? WHERE id=?");
     $stmt->bind_param("sssissssi", $title, $author, $year, $quantity, $status, $call_no, $genre, $description, $id);
     

@@ -1,7 +1,8 @@
 <?php
 session_start(); // MUST BE AT THE VERY TOP
 
-header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Origin: http://localhost');
+header('Access-Control-Allow-Credentials: true');
 header('Content-Type: application/json');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
@@ -40,6 +41,11 @@ if ($action === 'admin_login') {
     }
 
     $statement = mysqli_prepare($conn, 'SELECT id, username, password FROM admins WHERE username = ?');
+    if (!$statement) {
+        http_response_code(500);
+        echo json_encode(['success' => false, 'error' => 'Unable to access the admin account store.']);
+        exit;
+    }
     mysqli_stmt_bind_param($statement, 's', $username);
     mysqli_stmt_execute($statement);
     $result = mysqli_stmt_get_result($statement);
@@ -52,6 +58,7 @@ if ($action === 'admin_login') {
         exit;
     }
 
+    session_regenerate_id(true);
     $_SESSION['admin_id'] = $admin['id'];
     $_SESSION['admin_username'] = $admin['username'];
     
@@ -82,6 +89,11 @@ if ($action === 'signup') {
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
     $statement = mysqli_prepare($conn, 'INSERT INTO users (first_name, last_name, email, password) VALUES (?, ?, ?, ?)');
+    if (!$statement) {
+        http_response_code(500);
+        echo json_encode(['success' => false, 'error' => 'Unable to access the user account store.']);
+        exit;
+    }
     mysqli_stmt_bind_param($statement, 'ssss', $firstName, $lastName, $email, $hashedPassword);
 
     if (mysqli_stmt_execute($statement)) {
@@ -98,6 +110,11 @@ if ($action === 'signup') {
 // USER LOGIN
 if ($action === 'login') {
     $statement = mysqli_prepare($conn, 'SELECT id, first_name, last_name, password FROM users WHERE email = ?');
+    if (!$statement) {
+        http_response_code(500);
+        echo json_encode(['success' => false, 'error' => 'Unable to access the user account store.']);
+        exit;
+    }
     mysqli_stmt_bind_param($statement, 's', $email);
     mysqli_stmt_execute($statement);
     $result = mysqli_stmt_get_result($statement);
@@ -110,7 +127,7 @@ if ($action === 'login') {
         exit;
     }
 
-    // No unset(), no regenerate. Just set the user ID.
+    session_regenerate_id(true);
     $_SESSION['user_id'] = $user['id'];
     $_SESSION['user_name'] = $user['first_name'] . ' ' . $user['last_name'];
     

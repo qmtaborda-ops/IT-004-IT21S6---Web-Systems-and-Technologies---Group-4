@@ -257,6 +257,11 @@ if (!isset($_SESSION['admin_id'])) {
                 <!-- Footer -->
                 <div class="library-footer">
                     <span>Group 4 Prototype Library System</span>
+                    <div class="library-footer-actions">
+                        <button type="button" class="btn btn-sm btn-outline-secondary" id="paymentRequestsBtn">
+                            Payment requests
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -270,12 +275,26 @@ if (!isset($_SESSION['admin_id'])) {
                     <h5 class="modal-title">Manage Borrow Requests</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+
                 <div class="modal-body" id="requestsModalBody">
                     <!-- Populated by JS -->
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
                 </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="modal fade" id="paymentRequestsModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Payment requests</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="paymentRequestsBody">Loading...</div>
             </div>
         </div>
     </div>
@@ -300,6 +319,9 @@ if (!isset($_SESSION['admin_id'])) {
 
                     <label class="form-label" for="addQuantity">Quantity</label>
                     <input type="number" class="form-control mb-2" id="addQuantity" min="0" value="1" required>
+
+                    <label class="form-label" for="addPrice">Book price (&#8369;)</label>
+                    <input type="number" class="form-control mb-2" id="addPrice" min="0" step="0.01" value="0" required>
 
                     <label class="form-label" for="addCall">Call no.</label>
                     <input class="form-control mb-2" id="addCall" required>
@@ -333,8 +355,6 @@ if (!isset($_SESSION['admin_id'])) {
                         <option>Borrowed</option>
                         <option>In Process</option>
                         <option>Out of Stock</option>
-                        <option>Missing</option>
-                        <option>Damaged</option>
                     </select>
                 </div>
                 <div class="modal-footer">

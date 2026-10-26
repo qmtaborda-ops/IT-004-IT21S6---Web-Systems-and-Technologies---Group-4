@@ -6,6 +6,12 @@ function get(id) {
   return document.getElementById(id);
 }
 
+function escapeHtml(value) {
+  const div = document.createElement("div");
+  div.textContent = value == null ? "" : String(value);
+  return div.innerHTML;
+}
+
 function showModal() {
   bootstrap.Modal.getOrCreateInstance(get("addModal")).show();
 }
@@ -35,6 +41,7 @@ function makeRow(book) {
   row.dataset.id = book.id; 
   row.dataset.description = book.description || "";
   row.dataset.cover = book.cover_hash ? coverUrl(book) : "";
+  row.dataset.price = book.price || "0";
   
   if (book.is_hidden == 1) row.classList.add("row-hidden");
 
@@ -102,6 +109,7 @@ async function saveBook(event) {
   form.append("author", get("addAuthor").value.trim());
   form.append("year", get("addYear").value.trim());
   form.append("quantity", get("addQuantity").value);
+  form.append("price", get("addPrice").value);
   form.append("call_no", get("addCall").value.trim());
   form.append("status", get("addStatus").value);
   form.append("genre", get("addGenre").value);
@@ -155,6 +163,51 @@ async function deleteRow(icon) {
   }
 }
 
+async function openPaymentRequestsModal() {
+  const modalElement = get("paymentRequestsModal");
+  const body = get("paymentRequestsBody");
+  bootstrap.Modal.getOrCreateInstance(modalElement).show();
+  body.innerHTML = "<p class='text-center fst-italic'>Loading payment requests...</p>";
+  try {
+    const response = await fetch(API_URL + "get_payment_requests.php", { credentials: "include" });
+    const payments = await response.json();
+    if (!Array.isArray(payments) || payments.length === 0) {
+      body.innerHTML = "<p class='text-center fst-italic'>No payment requests.</p>";
+      return;
+    }
+    body.innerHTML = payments.map(function (payment) {
+      const actions = payment.status === "Pending"
+        ? "<button class='btn btn-sm btn-success payment-action' data-id='" + payment.id + "' data-status='Paid'>Mark paid</button> " +
+          "<button class='btn btn-sm btn-outline-danger payment-action' data-id='" + payment.id + "' data-status='Rejected'>Reject</button>"
+        : "<span class='badge bg-secondary'>" + escapeHtml(payment.status) + "</span>";
+      return "<div class='border-bottom py-2'><strong>" + escapeHtml(payment.user_name) + "</strong> (" + escapeHtml(payment.email) + ")" +
+        "<br><span>" + escapeHtml(payment.method.toUpperCase()) + " · &#8369;" + Number(payment.amount).toFixed(2) + "</span>" +
+        (payment.gcash_reference ? "<br><small>GCash ref: " + escapeHtml(payment.gcash_reference) + "</small>" : "") +
+        (payment.card_last4 ? "<br><small>Card ending in: ****" + escapeHtml(payment.card_last4) + "</small>" : "") +
+        (payment.notes ? "<br><small>" + escapeHtml(payment.notes) + "</small>" : "") +
+        "<div class='mt-2'>" + actions + "</div></div>";
+    }).join("");
+    body.querySelectorAll(".payment-action").forEach(function (button) {
+      button.addEventListener("click", async function () {
+        const response = await fetch(API_URL + "manage_payment.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ payment_id: this.dataset.id, status: this.dataset.status })
+        });
+        const result = await response.json();
+        if (!result.success) {
+          alert(result.error || "Could not update payment.");
+          return;
+        }
+        openPaymentRequestsModal();
+      });
+    });
+  } catch (error) {
+    body.innerHTML = "<p class='text-danger'>" + escapeHtml(error.message) + "</p>";
+  }
+}
+
 // MANAGE REQUESTS MODAL
 async function openRequestsModal(bookId) {
     const requestsModalEl = document.getElementById('requestsModal');
@@ -202,6 +255,9 @@ async function openRequestsModal(bookId) {
                         body: JSON.stringify({ request_id: reqId, action: 'approve' })
                     });
                     const apData = await apRes.json();
+                    if (!apRes.ok) {
+                        throw new Error(apData.error || `Request failed (HTTP ${apRes.status}).`);
+                    }
                     if (apData.success) {
                         this.outerHTML = `<button class="btn btn-sm btn-outline-danger return-btn" data-id="${reqId}">Return</button>`;
                         loadBooks(); 
@@ -209,7 +265,7 @@ async function openRequestsModal(bookId) {
                         alert("Error: " + apData.error);
                     }
                 } catch (e) {
-                    alert("Could not connect to server.");
+                    alert("Could not process the approval: " + e.message);
                 }
             });
         });
@@ -218,14 +274,22 @@ async function openRequestsModal(bookId) {
         body.querySelectorAll('.return-btn').forEach(btn => {
             btn.addEventListener('click', async function() {
                 const reqId = this.getAttribute('data-id');
-                this.innerHTML = 'Returning...';
+            const itemCondition = prompt('Condition of this specific returned copy: Good, Damaged, or Missing', 'Good');
+            if (!itemCondition || !['Good', 'Damaged', 'Missing'].includes(itemCondition)) {
+                alert('Enter exactly Good, Damaged, or Missing.');
+                return;
+            }
+            this.innerHTML = 'Returning...';
                 try {
                     const retRes = await fetch(API_URL + 'manage_request.php', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ request_id: reqId, action: 'return' })
+                        body: JSON.stringify({ request_id: reqId, action: 'return', item_condition: itemCondition })
                     });
                     const retData = await retRes.json();
+                    if (!retRes.ok) {
+                        throw new Error(retData.error || `Request failed (HTTP ${retRes.status}).`);
+                    }
                     if (retData.success) {
                         this.outerHTML = '<span class="badge bg-secondary">Returned</span>';
                         loadBooks(); 
@@ -233,7 +297,7 @@ async function openRequestsModal(bookId) {
                         alert("Error: " + retData.error);
                     }
                 } catch (e) {
-                    alert("Could not connect to server.");
+                    alert("Could not process the return: " + e.message);
                 }
             });
         });
@@ -245,6 +309,7 @@ async function openRequestsModal(bookId) {
 }
 
 get("addForm").addEventListener("submit", saveBook);
+get("paymentRequestsBtn").addEventListener("click", openPaymentRequestsModal);
 document.addEventListener("DOMContentLoaded", loadBooks);
 
 document.addEventListener("click", function (event) {
@@ -279,6 +344,7 @@ function openEditForm(icon) {
   get("addAuthor").value = cells[1].textContent;
   get("addYear").value = cells[2].textContent;
   get("addQuantity").value = cells[3].textContent;
+  get("addPrice").value = editingRow.dataset.price || "0";
   get("addStatus").value = cells[4].textContent.trim();
   get("addCall").value = cells[5].textContent;
   get("addGenre").value = icon.closest(".tab-pane").id;

@@ -50,6 +50,13 @@ function renderCatalogCarousel(books) {
     function updateCarouselMotion() {
         const groupWidth = coverGroup.getBoundingClientRect().width;
         const viewportWidth = track.parentElement.clientWidth;
+        if (visibleBooks.length <= 1) {
+            track.style.removeProperty('--carousel-duration');
+            track.style.removeProperty('--carousel-distance');
+            track.style.animation = 'none';
+            return;
+        }
+        track.style.animation = '';
         const groupCount = Math.max(2, Math.ceil(viewportWidth / groupWidth) + 1);
 
         while (track.children.length < groupCount) {
@@ -317,6 +324,7 @@ $(document).ready(function () {
             const response = await fetch(API_URL + 'auth.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
                 body: JSON.stringify({ ...payload, action })
             });
             const responseText = await response.text();

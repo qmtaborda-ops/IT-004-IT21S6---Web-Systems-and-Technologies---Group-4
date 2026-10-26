@@ -17,6 +17,7 @@ $title = $_POST['title'] ?? '';
 $author = $_POST['author'] ?? '';
 $year = $_POST['year'] ?? '';
 $quantity = (int)($_POST['quantity'] ?? 1);
+$price = (float)($_POST['price'] ?? 0);
 $status = $_POST['status'] ?? '';
 $call_no = $_POST['call_no'] ?? '';
 $genre = $_POST['genre'] ?? '';
@@ -38,6 +39,10 @@ if (isset($_FILES['cover']) && $_FILES['cover']['error'] !== UPLOAD_ERR_NO_FILE)
 
 if (empty(trim($title))) {
     echo json_encode(["success" => false, "error" => "Title is required."]);
+    exit;
+}
+if ($price < 0) {
+    echo json_encode(["success" => false, "error" => "Book price cannot be negative."]);
     exit;
 }
 
@@ -88,8 +93,8 @@ if ($id) {
     }
 
     // Save the book with exactly the status you selected
-    $stmt = $conn->prepare("UPDATE books SET title=?, author=?, year=?, quantity=?, status=?, call_no=?, genre_id=?, description=? WHERE id=?");
-    $stmt->bind_param("sssissssi", $title, $author, $year, $quantity, $status, $call_no, $genre, $description, $id);
+    $stmt = $conn->prepare("UPDATE books SET title=?, author=?, year=?, quantity=?, price=?, status=?, call_no=?, genre_id=?, description=? WHERE id=?");
+    $stmt->bind_param("sssidssssi", $title, $author, $year, $quantity, $price, $status, $call_no, $genre, $description, $id);
     
     if ($stmt->execute()) {
         if ($cover_data !== null) {
@@ -109,9 +114,9 @@ if ($id) {
     $stmt->close();
 } else {
     // Insert new book
-    $stmt = $conn->prepare("INSERT INTO books (title, author, year, quantity, status, call_no, genre_id, description, cover_image, cover_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO books (title, author, year, quantity, price, status, call_no, genre_id, description, cover_image, cover_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     $null = null;
-    $stmt->bind_param("sssissssbs", $title, $author, $year, $quantity, $status, $call_no, $genre, $description, $null, $cover_type);
+    $stmt->bind_param("sssidssssbs", $title, $author, $year, $quantity, $price, $status, $call_no, $genre, $description, $null, $cover_type);
     if ($cover_data !== null) { $stmt->send_long_data(8, $cover_data); }
     
     if ($stmt->execute()) {

@@ -15,7 +15,7 @@ include 'connection.php';
 $book_id = isset($_GET['book_id']) ? (int)$_GET['book_id'] : 0;
 
 $stmt = $conn->prepare("
-    SELECT br.id, br.borrow_date, br.return_date, br.status, 
+    SELECT br.id, br.borrow_date, br.return_date, br.status, br.quantity, br.item_condition,
            CONCAT(u.first_name, ' ', u.last_name) AS user_name 
     FROM borrow_requests br 
     JOIN users u ON br.user_id = u.id 

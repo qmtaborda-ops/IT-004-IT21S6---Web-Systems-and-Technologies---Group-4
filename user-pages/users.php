@@ -333,9 +333,9 @@ $firstName = $_SESSION['user_name'] ?? 'User';
                             <li class="mb-2">A borrow request must include a borrow date and a return date.</li>
                             <li class="mb-2">The return date must not be earlier than the borrow date and must be within two months of it.</li>
                             <li class="mb-2">A request is subject to librarian confirmation.</li>
-                            <li class="mb-2">Books must be returned by the agreed return date. Late returns incur a fine.</li>
+                            <li class="mb-2">Books must be returned by the agreed return date. Late returns incur a fine of 1% of the book price per overdue day, capped at the book price.</li>
                             <li class="mb-2">The borrower is responsible for the book while it is in their possession.</li>
-                            <li>Damaged or missing books may result in a liability equal to the listed price.</li>
+                            <li>Damaged or missing books incur a liability equal to the listed price of the book.</li>
                         </ol>
                     </div>
                     <div class="modal-footer justify-content-center">
@@ -388,7 +388,7 @@ $firstName = $_SESSION['user_name'] ?? 'User';
                         </div>
                         <div id="liabilitiesView" class="d-none">
                             <h3 class="account-section-title">Liabilities</h3>
-                            <p class="account-note">Late returns are fined per day overdue. Damaged or missing books are charged at the book's price.</p>
+                            <p class="account-note">Late returns cost 1% of the book price per overdue day, capped at the book price. Damaged or missing books cost the full listed price.</p>
                             <div class="library-table-wrap">
                                 <table class="table">
                                     <thead>
@@ -400,6 +400,11 @@ $firstName = $_SESSION['user_name'] ?? 'User';
                                     </tfoot>
                                 </table>
                             </div>
+                            <div class="d-flex justify-content-end mt-3">
+                                <button type="button" class="btn btn-success" id="payLiabilityBtn" disabled>
+                                    <i class="bi bi-wallet2 me-1"></i>Pay liability
+                                </button>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer justify-content-between">
@@ -407,6 +412,52 @@ $firstName = $_SESSION['user_name'] ?? 'User';
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <form class="modal-content" id="paymentForm">
+                    <div class="modal-header">
+                        <h2 class="modal-title fs-5" id="paymentModalLabel">Pay liability</h2>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="mb-3">Amount to pay: <strong id="paymentAmount">&#8369;0.00</strong></p>
+                        <label class="form-label" for="paymentMethod">Payment method</label>
+                        <select class="form-select mb-3" id="paymentMethod" required>
+                            <option value="cash">Cash at the library</option>
+                            <option value="gcash">GCash</option>
+                            <option value="card">Card</option>
+                        </select>
+                        <div id="cashPaymentInstructions" class="alert alert-secondary">
+                            Present your account name and this payment request to the librarian. Pay at the library counter.
+                        </div>
+                        <div id="gcashPaymentInstructions" class="alert alert-info d-none">
+                            Send the exact amount to the library's official GCash account, then enter the reference number below. Do not send money to an unverified number.
+                        </div>
+                        <div id="cardPaymentInstructions" class="alert alert-warning d-none">
+                            Card processing is not connected yet. This submits a card-payment request only; never enter your card number or CVV here.
+                        </div>
+                        <div id="gcashReferenceWrap" class="mb-3 d-none">
+                            <label class="form-label" for="gcashReference">GCash reference number</label>
+                            <input class="form-control" id="gcashReference" inputmode="numeric" pattern="[0-9]{13}" minlength="13" maxlength="13" autocomplete="off">
+                            <div class="form-text">Enter exactly 13 digits.</div>
+                        </div>
+                        <div id="cardDetailsWrap" class="d-none">
+                            <label class="form-label" for="cardReference">Card payment reference</label>
+                            <input class="form-control mb-2" id="cardReference" inputmode="numeric" pattern="[0-9]{16}" minlength="16" maxlength="16" autocomplete="off">
+                            <div class="form-text mb-3">Enter the exact 16-digit reference provided by the card payment gateway. Never enter a card number or CVV here.</div>
+                        </div>
+                        <label class="form-label" for="paymentNotes">Notes (optional)</label>
+                        <textarea class="form-control" id="paymentNotes" maxlength="500" rows="2" placeholder="Transaction details for the librarian"></textarea>
+                        <div id="paymentMessage" class="small mt-3" role="status"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-success">Submit payment request</button>
+                    </div>
+                </form>
             </div>
         </div>
         

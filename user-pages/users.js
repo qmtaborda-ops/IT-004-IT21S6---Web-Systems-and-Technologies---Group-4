@@ -48,6 +48,12 @@ document.addEventListener('DOMContentLoaded', function () {
             dateError.style.display = 'none';
         }
     });
+
+    document.getElementById('termsModal').addEventListener('hidden.bs.modal', function () {
+        if (selectedBookId) {
+            bootstrap.Modal.getOrCreateInstance(borrowModal).show();
+        }
+    });
 });
 
 const API_URL = '../database/';
@@ -69,6 +75,10 @@ const currentUserName = greetingText.replace('Have a good day, ', '').replace('.
 
 // THE ULTIMATE LOGIC
 function determineDisplayStatus(book) {
+    if (book.status === 'Damaged' || book.status === 'Missing') {
+        return book.status;
+    }
+
     let isBorrowedByMe = false;
     if (book.borrower_name && book.borrower_name.includes(currentUserName)) {
         isBorrowedByMe = true;
@@ -295,6 +305,88 @@ function accountPill(status) {
     return '<span class="book-status ' + accountStatusClass(status) + '">' + escapeHtml(status) + '</span>';
 }
 
+function formatPeso(amount) {
+    return '₱' + Number(amount).toLocaleString('en-PH', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
+}
+
+function updatePaymentInstructions() {
+    const method = document.getElementById('paymentMethod').value;
+    document.getElementById('cashPaymentInstructions').classList.toggle('d-none', method !== 'cash');
+    document.getElementById('gcashPaymentInstructions').classList.toggle('d-none', method !== 'gcash');
+    document.getElementById('cardPaymentInstructions').classList.toggle('d-none', method !== 'card');
+    document.getElementById('gcashReferenceWrap').classList.toggle('d-none', method !== 'gcash');
+    document.getElementById('cardDetailsWrap').classList.toggle('d-none', method !== 'card');
+    document.getElementById('gcashReference').required = method === 'gcash';
+    document.getElementById('cardReference').required = method === 'card';
+}
+
+function getLiabilities(records) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const liabilities = [];
+
+    records.forEach(function (record) {
+        const price = Math.max(0, Number(record.price) || 0);
+        const quantity = Math.max(1, Number(record.quantity) || 1);
+        const itemCondition = (record.item_condition || 'Good').toLowerCase();
+        if (itemCondition === 'damaged' || itemCondition === 'missing') {
+            liabilities.push({
+                title: record.title,
+                reason: itemCondition === 'damaged' ? 'Damaged book' : 'Missing book',
+                amount: price * quantity
+            });
+            return;
+        }
+
+        if (record.status === 'Returned') return;
+        const dueDate = new Date(record.return_date + 'T00:00:00');
+        if (Number.isNaN(dueDate.getTime()) || today <= dueDate) return;
+
+        const overdueDays = Math.floor((today - dueDate) / 86400000);
+        const amount = Math.min(price * quantity, price * quantity * 0.01 * overdueDays);
+        liabilities.push({
+            title: record.title,
+            reason: overdueDays + ' day(s) overdue',
+            amount: amount
+        });
+    });
+    return liabilities;
+}
+
+function renderLiabilities(records) {
+    const grossLiabilities = getLiabilities(records);
+    let remainingPaid = records.length ? Math.max(0, Number(records[0].paid_total) || 0) : 0;
+    const liabilities = grossLiabilities.reduce(function (openItems, item) {
+        const applied = Math.min(remainingPaid, item.amount);
+        remainingPaid -= applied;
+        const remainingAmount = item.amount - applied;
+        if (remainingAmount > 0.005) {
+            openItems.push(Object.assign({}, item, { amount: remainingAmount }));
+        }
+        return openItems;
+    }, []);
+    const body = document.getElementById('liabilitiesBody');
+    const total = liabilities.reduce(function (sum, item) { return sum + item.amount; }, 0);
+    document.getElementById('liabilitiesTotal').textContent = formatPeso(total);
+    const payButton = document.getElementById('payLiabilityBtn');
+    payButton.disabled = total <= 0;
+    payButton.dataset.amount = total.toFixed(2);
+
+    if (!liabilities.length) {
+        body.innerHTML = '<tr><td colspan="3" class="text-center fst-italic">No outstanding liabilities</td></tr>';
+        return;
+    }
+
+    body.innerHTML = liabilities.map(function (item) {
+        return '<tr><td>' + escapeHtml(item.title) + '</td><td>' +
+            escapeHtml(item.reason) + '</td><td class="text-end">' +
+            formatPeso(item.amount) + '</td></tr>';
+    }).join('');
+}
+
 async function loadUserHistory() {
     try {
         const res = await fetch(API_URL + 'get_user_history.php?t=' + new Date().getTime(), { credentials: 'include' });
@@ -302,6 +394,7 @@ async function loadUserHistory() {
 
         const currentTbody = document.getElementById('currentBorrowsBody');
         const historyTbody = document.getElementById('historyBody');
+        renderLiabilities(Array.isArray(records) ? records : []);
 
         if (!Array.isArray(records) || records.length === 0) {
             currentTbody.innerHTML = '<tr><td colspan="4" class="text-center fst-italic">No borrowed books found.</td></tr>';
@@ -359,4 +452,45 @@ accountModal.addEventListener('show.bs.modal', function () {
     showAccountView(pendingAccountView);
     pendingAccountView = 'account';
     loadUserHistory();
+});
+
+document.getElementById('payLiabilityBtn').addEventListener('click', function () {
+    document.getElementById('paymentAmount').textContent = formatPeso(this.dataset.amount || 0);
+    document.getElementById('paymentMessage').textContent = '';
+    document.getElementById('paymentForm').reset();
+    updatePaymentInstructions();
+    bootstrap.Modal.getOrCreateInstance(document.getElementById('paymentModal')).show();
+});
+
+document.getElementById('paymentMethod').addEventListener('change', updatePaymentInstructions);
+
+document.getElementById('paymentForm').addEventListener('submit', async function (event) {
+    event.preventDefault();
+    const message = document.getElementById('paymentMessage');
+    const method = document.getElementById('paymentMethod').value;
+    const button = this.querySelector('button[type="submit"]');
+    button.disabled = true;
+    message.textContent = 'Submitting...';
+    try {
+        const response = await fetch(API_URL + 'submit_payment.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({
+                method: method,
+                gcash_reference: document.getElementById('gcashReference').value.trim(),
+                card_reference: document.getElementById('cardReference').value.trim(),
+                notes: document.getElementById('paymentNotes').value.trim()
+            })
+        });
+        const result = await response.json();
+        if (!response.ok || !result.success) throw new Error(result.error || 'Unable to submit payment request.');
+        message.className = 'small mt-3 text-success';
+        message.textContent = result.message;
+        this.querySelector('button[type="submit"]').textContent = 'Submitted';
+    } catch (error) {
+        message.className = 'small mt-3 text-danger';
+        message.textContent = error.message;
+        button.disabled = false;
+    }
 });

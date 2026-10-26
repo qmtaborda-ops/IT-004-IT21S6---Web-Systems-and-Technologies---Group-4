@@ -1,3 +1,5 @@
+@import url('../responsive.css');
+
 /* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
 body {
   margin: 0;
@@ -72,14 +74,14 @@ body {
 
 .library-user-btn:hover,
 .library-user-btn:focus-visible,
-.library-user-btn.show { 
-  color: #fff3c4; 
-  outline: none; 
+.library-user-btn.show {
+  color: #fff3c4;
+  outline: none;
 }
 
-.library-user-btn:focus-visible i { 
-  box-shadow: 0 0 0 3px rgba(227, 197, 101, 0.3); 
-  border-radius: 50%; 
+.library-user-btn:focus-visible i {
+  box-shadow: 0 0 0 3px rgba(227, 197, 101, 0.3);
+  border-radius: 50%;
 }
 
 .account-menu {
@@ -102,9 +104,9 @@ body {
 }
 
 .account-menu .dropdown-item:hover,
-.account-menu .dropdown-item:focus { 
-  background: rgba(201, 162, 39, 0.25); 
-  color: #2e2418; 
+.account-menu .dropdown-item:focus {
+  background: rgba(201, 162, 39, 0.25);
+  color: #2e2418;
 }
 
 .library-user-search {
@@ -297,4 +299,30 @@ body {
   content: ' (hidden)';
   font-size: 12px;
   font-style: italic;
+}
+
+/* Allow headers to reflow before the search and brand collide. */
+.library-page, .library-page-content, .library-catalog { min-width: 0; }
+.library-catalog-header { flex-wrap: wrap; }
+.library-catalog-header > div:first-child { min-width: 0; }
+.library-catalog-header > div:first-child > div { min-width: 0; overflow-wrap: anywhere; }
+.library-role-badge-img { flex-shrink: 0; }
+.library-user-tools { max-width: 100%; }
+.library-user-search { width: min(100%, 360px); }
+.library-user-search input { flex: 1; min-width: 0; width: 100%; }
+.book-table-wrap .table { min-width: 760px; }
+.book-actions { white-space: nowrap; }
+.book-actions i { display: inline-flex; align-items: center; justify-content: center; min-width: 32px; min-height: 44px; margin-left: 0; }
+.library-page { min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; }
+.library-page-content { flex: 1; }
+
+@media (max-width: 767.98px) {
+  .library-catalog-header { padding: 16px; gap: 12px; }
+  .library-user-tools { width: 100%; margin-left: 0; align-items: stretch; }
+  .library-user-greeting { align-self: flex-end; }
+  .library-user-search { width: 100%; }
+  #genreTabs { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; }
+  #genreTabs .nav-item { flex: 0 0 auto; }
+  .book-table-wrap { padding: 12px; }
+  .add-btn, .save-btn { min-height: 44px; }
 }

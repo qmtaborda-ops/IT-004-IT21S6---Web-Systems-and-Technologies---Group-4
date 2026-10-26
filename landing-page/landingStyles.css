@@ -408,6 +408,55 @@ body {
     outline-offset: 2px;
 }
 
+.catalog-carousel-section {
+    margin: -1.5rem auto 4rem;
+    color: #3e2a1e;
+}
+
+.catalog-carousel-track,
+.catalog-carousel-group {
+    width: max-content;
+}
+
+.catalog-carousel-track {
+    animation: catalog-cover-scroll var(--carousel-duration) steps(var(--carousel-steps)) infinite;
+    will-change: transform;
+}
+
+.catalog-carousel-group {
+    flex: 0 0 auto;
+    padding-right: 0.5rem;
+}
+
+@keyframes catalog-cover-scroll {
+    from {
+        transform: translate3d(0, 0, 0);
+    }
+
+    to {
+        transform: translate3d(calc(-1 * var(--carousel-distance)), 0, 0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .catalog-carousel-track {
+        animation: none;
+    }
+}
+
+.catalog-carousel-cover {
+    display: block;
+    width: 112px;
+    height: 154px;
+    flex: 0 0 auto;
+    border: 1px solid #d3bd8b;
+    border-radius: 3px;
+    background: transparent;
+    filter: brightness(0.8) saturate(0.9);
+    object-fit: contain;
+    box-shadow: 3px 5px 10px #3e2a1e40;
+}
+
 .table tbody tr:hover {
     background: #c9a2271f;
 }
@@ -418,6 +467,15 @@ body {
 }
 
 @media (max-width: 767.98px) {
+    .catalog-carousel-section {
+        margin-top: -1rem;
+    }
+
+    .catalog-carousel-cover {
+        width: 88px;
+        height: 122px;
+    }
+
     #catalog .d-flex.align-items-start {
         align-items: stretch !important;
         flex-direction: column;

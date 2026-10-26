@@ -26,6 +26,53 @@ function showBookDetails(book) {
     bootstrap.Modal.getOrCreateInstance(document.getElementById('previewDetailsModal')).show();
 }
 
+function renderCatalogCarousel(books) {
+    const track = document.getElementById('catalog-carousel-track');
+    track.replaceChildren();
+
+    const visibleBooks = books.filter(book => book.cover_hash);
+    const coverGroup = document.createElement('div');
+    coverGroup.className = 'catalog-carousel-group d-flex align-items-center gap-2';
+    coverGroup.setAttribute('role', 'group');
+    coverGroup.setAttribute('aria-label', 'Book covers');
+
+    visibleBooks.forEach(book => {
+        const cover = document.createElement('img');
+        cover.className = 'catalog-carousel-cover';
+        cover.src = API_URL + 'get_cover.php?id=' + encodeURIComponent(book.id) + '&v=' + encodeURIComponent(book.cover_hash);
+        cover.alt = 'Cover of ' + (book.title || 'this book');
+        cover.loading = 'eager';
+        coverGroup.appendChild(cover);
+    });
+
+    track.appendChild(coverGroup);
+
+    function updateCarouselMotion() {
+        const groupWidth = coverGroup.getBoundingClientRect().width;
+        const viewportWidth = track.parentElement.clientWidth;
+        const groupCount = Math.max(2, Math.ceil(viewportWidth / groupWidth) + 1);
+
+        while (track.children.length < groupCount) {
+            const duplicateGroup = coverGroup.cloneNode(true);
+            duplicateGroup.removeAttribute('role');
+            duplicateGroup.removeAttribute('aria-label');
+            duplicateGroup.setAttribute('aria-hidden', 'true');
+            track.appendChild(duplicateGroup);
+        }
+
+        while (track.children.length > groupCount) {
+            track.lastElementChild.remove();
+        }
+
+        track.style.setProperty('--carousel-steps', String(Math.max(1, Math.round(groupWidth * window.devicePixelRatio))));
+        track.style.setProperty('--carousel-duration', `${groupWidth / 60}s`);
+        track.style.setProperty('--carousel-distance', `${groupWidth}px`);
+    }
+
+    updateCarouselMotion();
+    window.addEventListener('resize', updateCarouselMotion, { passive: true });
+}
+
 async function loadCatalogPreview() {
     const tableBodies = Array.from(document.querySelectorAll('#genre-tabs-content tbody[data-genre-id]'));
 
@@ -64,6 +111,7 @@ async function loadCatalogPreview() {
                 genreBooks.push(book);
             }
         });
+        renderCatalogCarousel(Array.from(previewBooks.values()));
 
         tableBodies.forEach(tbody => {
             const emptyState = tbody.querySelector('[data-empty-state]');

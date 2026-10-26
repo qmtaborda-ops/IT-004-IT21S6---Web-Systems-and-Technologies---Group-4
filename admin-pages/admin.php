@@ -1,6 +1,5 @@
 <?php
 session_start();
-// If the admin is not logged in, kick them back to the landing page
 if (!isset($_SESSION['admin_id'])) {
     header("Location: ../landing-page/landing.html");
     exit;
@@ -12,21 +11,16 @@ if (!isset($_SESSION['admin_id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Library Management System · Booker's Club</title>
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-    <!-- Page Styles -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet">
     <link href="adminStyles.css" rel="stylesheet">
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
 </head>
-
 <body>
     <div class="library-page">
         <div class="library-page-content">
             <div class="library-catalog">
-
                 <!-- Header -->
                 <div class="library-catalog-header">
                     <div class="d-flex align-items-center gap-3">
@@ -59,45 +53,32 @@ if (!isset($_SESSION['admin_id'])) {
                 <ul class="nav nav-tabs mb-0" id="genreTabs" role="tablist">
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active" id="scifi-tab" data-bs-toggle="tab" data-bs-target="#scifi"
-                            type="button" role="tab" aria-controls="scifi" aria-selected="true">
-                            Sci-Fi & Cyberpunk
-                        </button>
+                            type="button" role="tab" aria-controls="scifi" aria-selected="true">Sci-Fi & Cyberpunk</button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="fantasy-tab" data-bs-toggle="tab" data-bs-target="#fantasy"
-                            type="button" role="tab" aria-controls="fantasy" aria-selected="false">
-                            Fantasy & Supernatural
-                        </button>
+                            type="button" role="tab" aria-controls="fantasy" aria-selected="false">Fantasy & Supernatural</button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="action-tab" data-bs-toggle="tab" data-bs-target="#action"
-                            type="button" role="tab" aria-controls="action" aria-selected="false">
-                            Action, Adventure & Martial Arts
-                        </button>
+                            type="button" role="tab" aria-controls="action" aria-selected="false">Action, Adventure & Martial Arts</button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="romance-tab" data-bs-toggle="tab" data-bs-target="#romance"
-                            type="button" role="tab" aria-controls="romance" aria-selected="false">
-                            Romance & Drama
-                        </button>
+                            type="button" role="tab" aria-controls="romance" aria-selected="false">Romance & Drama</button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="mystery-tab" data-bs-toggle="tab" data-bs-target="#mystery"
-                            type="button" role="tab" aria-controls="mystery" aria-selected="false">
-                            Mystery, Horror & Psychological
-                        </button>
+                            type="button" role="tab" aria-controls="mystery" aria-selected="false">Mystery, Horror & Psychological</button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="academics-tab" data-bs-toggle="tab" data-bs-target="#academics"
-                            type="button" role="tab" aria-controls="academics" aria-selected="false">
-                            Academics, Non-Fiction & Skill Building
-                        </button>
+                            type="button" role="tab" aria-controls="academics" aria-selected="false">Academics, Non-Fiction & Skill Building</button>
                     </li>
                 </ul>
 
                 <!-- Tab Content Panels -->
                 <div class="tab-content mt-2" id="genreTabsContent">
-
                     <!-- 1. Sci-Fi & Cyberpunk -->
                     <div class="tab-pane fade show active" id="scifi" role="tabpanel" aria-labelledby="scifi-tab">
                         <div class="book-table-wrap">
@@ -110,15 +91,14 @@ if (!isset($_SESSION['admin_id'])) {
                                         <th>Title</th>
                                         <th>Author</th>
                                         <th>Year</th>
+                                        <th>Qty</th>
                                         <th>Status</th>
                                         <th>Call No.</th>
-                                        <th>Borrower</th>
+                                        <th>Borrowers</th>
                                         <th class="text-end">Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <!-- Populated dynamically via JS -->
-                                </tbody>
+                                <tbody></tbody>
                             </table>
                             <div class="book-empty-state">
                                 <i class="bi bi-journal-x"></i>
@@ -140,15 +120,14 @@ if (!isset($_SESSION['admin_id'])) {
                                         <th>Title</th>
                                         <th>Author</th>
                                         <th>Year</th>
+                                        <th>Qty</th>
                                         <th>Status</th>
                                         <th>Call No.</th>
                                         <th>Borrower</th>
                                         <th class="text-end">Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <!-- Populated dynamically via JS -->
-                                </tbody>
+                                <tbody></tbody>
                             </table>
                             <div class="book-empty-state">
                                 <i class="bi bi-journal-x"></i>
@@ -170,15 +149,14 @@ if (!isset($_SESSION['admin_id'])) {
                                         <th>Title</th>
                                         <th>Author</th>
                                         <th>Year</th>
+                                        <th>Qty</th>
                                         <th>Status</th>
                                         <th>Call No.</th>
                                         <th>Borrower</th>
                                         <th class="text-end">Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <!-- Populated dynamically via JS -->
-                                </tbody>
+                                <tbody></tbody>
                             </table>
                             <div class="book-empty-state">
                                 <i class="bi bi-journal-x"></i>
@@ -200,15 +178,14 @@ if (!isset($_SESSION['admin_id'])) {
                                         <th>Title</th>
                                         <th>Author</th>
                                         <th>Year</th>
+                                        <th>Qty</th>
                                         <th>Status</th>
                                         <th>Call No.</th>
                                         <th>Borrower</th>
                                         <th class="text-end">Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <!-- Populated dynamically via JS -->
-                                </tbody>
+                                <tbody></tbody>
                             </table>
                             <div class="book-empty-state">
                                 <i class="bi bi-journal-x"></i>
@@ -230,15 +207,14 @@ if (!isset($_SESSION['admin_id'])) {
                                         <th>Title</th>
                                         <th>Author</th>
                                         <th>Year</th>
+                                        <th>Qty</th>
                                         <th>Status</th>
                                         <th>Call No.</th>
                                         <th>Borrower</th>
                                         <th class="text-end">Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <!-- Populated dynamically via JS -->
-                                </tbody>
+                                <tbody></tbody>
                             </table>
                             <div class="book-empty-state">
                                 <i class="bi bi-journal-x"></i>
@@ -260,15 +236,14 @@ if (!isset($_SESSION['admin_id'])) {
                                         <th>Title</th>
                                         <th>Author</th>
                                         <th>Year</th>
+                                        <th>Qty</th>
                                         <th>Status</th>
                                         <th>Call No.</th>
                                         <th>Borrower</th>
                                         <th class="text-end">Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <!-- Populated dynamically via JS -->
-                                </tbody>
+                                <tbody></tbody>
                             </table>
                             <div class="book-empty-state">
                                 <i class="bi bi-journal-x"></i>
@@ -277,14 +252,30 @@ if (!isset($_SESSION['admin_id'])) {
                             </div>
                         </div>
                     </div>
-
                 </div>
 
                 <!-- Footer -->
                 <div class="library-footer">
                     <span>Group 4 Prototype Library System</span>
                 </div>
+            </div>
+        </div>
+    </div>
 
+    <!-- Manage Requests Modal -->
+    <div class="modal fade" id="requestsModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Manage Borrow Requests</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="requestsModalBody">
+                    <!-- Populated by JS -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
@@ -292,7 +283,7 @@ if (!isset($_SESSION['admin_id'])) {
     <!-- Add / Edit Book Modal -->
     <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <form class="modal-content" id="addForm">
+            <form class="modal-content" id="addForm" enctype="multipart/form-data">
                 <div class="modal-header">
                     <h5 class="modal-title" id="addModalTitle">Add book</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -307,14 +298,16 @@ if (!isset($_SESSION['admin_id'])) {
                     <label class="form-label" for="addYear">Year</label>
                     <input class="form-control mb-2" id="addYear" required>
 
+                    <label class="form-label" for="addQuantity">Quantity</label>
+                    <input type="number" class="form-control mb-2" id="addQuantity" min="0" value="1" required>
+
                     <label class="form-label" for="addCall">Call no.</label>
                     <input class="form-control mb-2" id="addCall" required>
 
                     <label class="form-label" for="addDescription">Description</label>
-                    <textarea class="form-control mb-2" id="addDescription" rows="4"
-                        placeholder="Short summary / synopsis of the book"></textarea>
+                    <textarea class="form-control mb-2" id="addDescription" rows="3"></textarea>
 
-                    <label class="form-label" for="addCover">Cover image <small class="text-muted">(JPG, PNG, WEBP or GIF, max 800KB)</small></label>
+                    <label class="form-label" for="addCover">Cover image <small>(Max 800KB)</small></label>
                     <input type="file" class="form-control mb-2" id="addCover" accept="image/jpeg,image/png,image/webp,image/gif">
                     <div id="coverPreviewWrap" class="mb-2" style="display:none;">
                         <img id="coverPreview" alt="Cover preview" style="max-height:140px; border-radius:6px; border:1px solid #ddd;">
@@ -339,21 +332,20 @@ if (!isset($_SESSION['admin_id'])) {
                         <option>Available</option>
                         <option>Borrowed</option>
                         <option>In Process</option>
+                        <option>Out of Stock</option>
                         <option>Missing</option>
                         <option>Damaged</option>
                     </select>
                 </div>
                 <div class="modal-footer">
+                    <button type="button" class="btn btn-danger me-auto" id="returnBookBtn" style="display:none;">Return Book</button>
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" class="save-btn">Save book</button>
                 </div>
             </form>
         </div>
     </div>
-
-    <!-- Page Scripts -->
-    <script src="../search.js" defer></script>
-    <script src="admin.js"></script>
+    <script src="../search.js?v=22" defer></script>
+    <script src="admin.js?v=22"></script>
 </body>
-
 </html>

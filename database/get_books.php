@@ -8,15 +8,16 @@ header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
 include 'connection.php';
 
-// The cover image itself is NOT included here (too big for JSON); the page loads it
-// from get_cover.php. cover_hash changes whenever the image changes (cache busting).
+// Get all books with their pending request count
 $sql = "SELECT b.id, b.title, b.author, b.year, b.status, b.call_no, b.genre_id, b.is_hidden,
-               b.description,
+               b.description, b.quantity,
                IF(b.cover_image IS NULL, NULL, MD5(b.cover_image)) AS cover_hash,
-               CONCAT(u.first_name, ' ', u.last_name) AS borrower_name 
-        FROM books b 
-        LEFT JOIN borrow_requests br ON b.id = br.book_id AND br.status = 'Approved'
-        LEFT JOIN users u ON br.user_id = u.id";
+               (SELECT GROUP_CONCAT(CONCAT(u.first_name, ' ', u.last_name) SEPARATOR ', ') 
+                FROM borrow_requests br 
+                JOIN users u ON br.user_id = u.id 
+                WHERE br.book_id = b.id AND br.status = 'Approved') AS borrower_name,
+               (SELECT COUNT(*) FROM borrow_requests br WHERE br.book_id = b.id AND br.status = 'Pending') AS pending_count
+        FROM books b";
 
 $result = mysqli_query($conn, $sql);
 $books = array();

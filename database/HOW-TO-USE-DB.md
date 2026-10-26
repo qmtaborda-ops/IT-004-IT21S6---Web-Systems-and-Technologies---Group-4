@@ -46,6 +46,7 @@ CREATE TABLE IF NOT EXISTS books (
     title VARCHAR(255) NOT NULL,
     author VARCHAR(255) NOT NULL,
     year VARCHAR(10) NOT NULL,
+    quantity INT NOT NULL DEFAULT 1,
     status VARCHAR(50) DEFAULT 'Available',
     call_no VARCHAR(50) NOT NULL,
     genre_id VARCHAR(50) NOT NULL,
@@ -61,6 +62,7 @@ CREATE TABLE IF NOT EXISTS borrow_requests (
     id INT AUTO_INCREMENT PRIMARY KEY,
     book_id INT NOT NULL,
     user_id INT NULL DEFAULT NULL,
+    quantity INT NOT NULL DEFAULT 1,
     borrow_date DATE NOT NULL,
     return_date DATE NOT NULL,
     status VARCHAR(50) DEFAULT 'Pending',
@@ -69,8 +71,18 @@ CREATE TABLE IF NOT EXISTS borrow_requests (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
 );
 
--- 6. UPGRADE FOR EXISTING DATABASES (book description + cover image)
+-- 6. UPGRADE FOR EXISTING DATABASES (quantity, description + cover image)
 -- Skips automatically if the columns already exist, so it is safe to run this whole script again.
+SET @s = IF((SELECT COUNT(*) FROM information_schema.COLUMNS
+             WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'books' AND COLUMN_NAME = 'quantity') = 0,
+            'ALTER TABLE books ADD COLUMN quantity INT NOT NULL DEFAULT 1', 'SELECT 1');
+PREPARE st FROM @s; EXECUTE st; DEALLOCATE PREPARE st;
+
+SET @s = IF((SELECT COUNT(*) FROM information_schema.COLUMNS
+             WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'borrow_requests' AND COLUMN_NAME = 'quantity') = 0,
+            'ALTER TABLE borrow_requests ADD COLUMN quantity INT NOT NULL DEFAULT 1', 'SELECT 1');
+PREPARE st FROM @s; EXECUTE st; DEALLOCATE PREPARE st;
+
 SET @s = IF((SELECT COUNT(*) FROM information_schema.COLUMNS
              WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'books' AND COLUMN_NAME = 'description') = 0,
             'ALTER TABLE books ADD COLUMN description TEXT NULL', 'SELECT 1');

@@ -1,9 +1,23 @@
 -- ============================================================
--- Book description + cover image  (safe to run more than once)
+-- Book quantity, description + cover image  (safe to run more than once)
 -- Run in phpMyAdmin: select library_db -> SQL tab -> paste -> Go
 -- Works for old databases AND new ones; it only adds what is missing.
 -- ============================================================
 USE library_db;
+
+-- Available inventory quantity
+SET @s = IF((SELECT COUNT(*) FROM information_schema.COLUMNS
+             WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'books' AND COLUMN_NAME = 'quantity') = 0,
+            'ALTER TABLE books ADD COLUMN quantity INT NOT NULL DEFAULT 1',
+            'SELECT 1');
+PREPARE st FROM @s; EXECUTE st; DEALLOCATE PREPARE st;
+
+-- Quantity requested for each borrowing record
+SET @s = IF((SELECT COUNT(*) FROM information_schema.COLUMNS
+             WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'borrow_requests' AND COLUMN_NAME = 'quantity') = 0,
+            'ALTER TABLE borrow_requests ADD COLUMN quantity INT NOT NULL DEFAULT 1',
+            'SELECT 1');
+PREPARE st FROM @s; EXECUTE st; DEALLOCATE PREPARE st;
 
 -- description
 SET @s = IF((SELECT COUNT(*) FROM information_schema.COLUMNS

@@ -341,6 +341,44 @@
         </div>
     </div>
     <!-- De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S -->
+    <div class="modal fade" id="previewDetailsModal" tabindex="-1" aria-labelledby="previewDetailsTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+            <div class="modal-content preview-details-modal">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5">Book details</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-4">
+                        <div class="col-md-5 text-center">
+                            <img id="previewDetailsCover" alt="" hidden>
+                            <div id="previewDetailsNoCover" class="preview-no-cover" hidden>
+                                <i class="bi bi-book" aria-hidden="true"></i>
+                                <span>No cover image</span>
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <h3 id="previewDetailsTitle" class="mt-2 mb-1"></h3>
+                            <p class="mb-3">by <span id="previewDetailsAuthor"></span></p>
+                            <h6 class="text-uppercase">Overview</h6>
+                            <p id="previewDetailsDescription"></p>
+                            <hr>
+                            <div class="row g-2">
+                                <div class="col-6">
+                                    <small class="text-muted text-uppercase">Year</small>
+                                    <div id="previewDetailsYear"></div>
+                                </div>
+                                <div class="col-6">
+                                    <small class="text-muted text-uppercase">Book No.</small>
+                                    <div id="previewDetailsCall"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-label="Login" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">

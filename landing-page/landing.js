@@ -1,5 +1,30 @@
 const API_URL = '../database/';
-const MAX_PREVIEW_BOOKS_PER_GENRE = 5;
+const MAX_PREVIEW_BOOKS_PER_GENRE = 3;
+const previewBooks = new Map();
+
+function showBookDetails(book) {
+    document.getElementById('previewDetailsTitle').textContent = book.title || 'Untitled';
+    document.getElementById('previewDetailsAuthor').textContent = book.author || 'Unknown author';
+    document.getElementById('previewDetailsYear').textContent = book.year || 'Not specified';
+    document.getElementById('previewDetailsCall').textContent = book.call_no || 'Not specified';
+    document.getElementById('previewDetailsDescription').textContent =
+        book.description && book.description.trim() ? book.description : 'No description available for this book.';
+
+    const cover = document.getElementById('previewDetailsCover');
+    const noCover = document.getElementById('previewDetailsNoCover');
+    if (book.cover_hash) {
+        cover.src = API_URL + 'get_cover.php?id=' + encodeURIComponent(book.id) + '&v=' + encodeURIComponent(book.cover_hash);
+        cover.alt = 'Cover of ' + (book.title || 'this book');
+        cover.hidden = false;
+        noCover.hidden = true;
+    } else {
+        cover.removeAttribute('src');
+        cover.hidden = true;
+        noCover.hidden = false;
+    }
+
+    bootstrap.Modal.getOrCreateInstance(document.getElementById('previewDetailsModal')).show();
+}
 
 async function loadCatalogPreview() {
     const tableBodies = Array.from(document.querySelectorAll('#genre-tabs-content tbody[data-genre-id]'));
@@ -19,6 +44,7 @@ async function loadCatalogPreview() {
 
         books.forEach(book => {
             if (Number(book.is_hidden) === 1) return;
+            previewBooks.set(String(book.id), book);
 
             const genreBooks = booksByGenre.get(String(book.genre_id));
             if (genreBooks) {
@@ -34,7 +60,35 @@ async function loadCatalogPreview() {
 
             genreBooks.slice(0, MAX_PREVIEW_BOOKS_PER_GENRE).forEach(book => {
                 const row = document.createElement('tr');
-                ['', book.title, book.author, book.year].forEach(value => {
+
+                const coverCell = document.createElement('td');
+                coverCell.className = 'catalog-cover-cell';
+                if (book.cover_hash) {
+                    const cover = document.createElement('img');
+                    cover.className = 'catalog-book-cover';
+                    cover.src = API_URL + 'get_cover.php?id=' + encodeURIComponent(book.id) + '&v=' + encodeURIComponent(book.cover_hash);
+                    cover.alt = 'Cover of ' + (book.title || 'this book');
+                    cover.loading = 'lazy';
+                    coverCell.appendChild(cover);
+                } else {
+                    const placeholder = document.createElement('i');
+                    placeholder.className = 'bi bi-book catalog-book-cover-placeholder';
+                    placeholder.setAttribute('aria-label', 'No cover image');
+                    coverCell.appendChild(placeholder);
+                }
+                row.appendChild(coverCell);
+
+                const titleCell = document.createElement('td');
+                const titleButton = document.createElement('button');
+                titleButton.type = 'button';
+                titleButton.className = 'catalog-book-details';
+                titleButton.dataset.bookId = String(book.id);
+                titleButton.textContent = book.title || 'Untitled';
+                titleButton.setAttribute('aria-label', 'View details for ' + (book.title || 'untitled book'));
+                titleCell.appendChild(titleButton);
+                row.appendChild(titleCell);
+
+                [book.author, book.year].forEach(value => {
                     const cell = document.createElement('td');
                     cell.textContent = value == null ? '' : String(value);
                     row.appendChild(cell);
@@ -83,6 +137,18 @@ async function loadCatalogPreview() {
         console.error('Error loading catalog preview:', error);
     }
 }
+
+document.addEventListener('click', event => {
+    const button = event.target.closest('.catalog-book-details');
+    if (!button) return;
+    const book = previewBooks.get(button.dataset.bookId);
+    if (book) showBookDetails(book);
+});
+
+document.getElementById('previewDetailsCover').addEventListener('error', function () {
+    this.hidden = true;
+    document.getElementById('previewDetailsNoCover').hidden = false;
+});
 
 $(document).ready(function () {
     loadCatalogPreview();

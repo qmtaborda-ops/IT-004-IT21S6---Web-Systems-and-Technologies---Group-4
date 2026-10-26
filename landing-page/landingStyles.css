@@ -206,7 +206,7 @@ body {
 .table {
     table-layout: fixed;
     width: 80%;
-    height: 420px;
+    height: 540px;
     border: 2px solid #3e2a1e;
     border-collapse: collapse;
     font-size: 15px;
@@ -229,7 +229,101 @@ body {
     border: none;
     border-bottom: 1px solid #4a2f1f33;
     padding: 10px;
-    vertical-align: top;
+    vertical-align: middle;
+}
+
+.table tbody td.catalog-cover-cell {
+    vertical-align: middle;
+}
+
+.catalog-book-cover {
+    display: block;
+    width: 100%;
+    max-width: 140px;
+    height: 132px;
+    margin: 0 auto;
+    border: 1px solid #8d6a3b;
+    border-radius: 3px;
+    object-fit: contain;
+    box-shadow: 2px 3px 5px rgba(62, 42, 30, 0.2);
+}
+
+.catalog-book-cover-placeholder {
+    display: flex;
+    width: 100%;
+    max-width: 140px;
+    height: 132px;
+    margin: 0 auto;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed #8d6a3b;
+    border-radius: 3px;
+    color: #8d6a3b;
+    font-size: 1.5rem;
+}
+
+.catalog-book-details {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-weight: 700;
+    text-decoration: underline dotted #8d6a3b;
+    text-underline-offset: 3px;
+    cursor: pointer;
+}
+
+.catalog-book-details:hover,
+.catalog-book-details:focus-visible {
+    color: #8d6a3b;
+}
+
+.catalog-book-details:focus-visible {
+    outline: 2px solid #c9a227;
+    outline-offset: 3px;
+}
+
+#previewDetailsCover {
+    max-width: 100%;
+    max-height: 420px;
+    border-radius: 4px;
+    box-shadow: 4px 6px 14px rgba(62, 42, 30, 0.22);
+}
+
+.preview-no-cover {
+    min-height: 320px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #d3bd8b;
+    border-radius: 4px;
+    color: #6b5a45;
+}
+
+.preview-no-cover:not([hidden]) {
+    display: flex;
+}
+
+.preview-no-cover i {
+    margin-bottom: 0.5rem;
+    color: #8d6a3b;
+    font-size: 3rem;
+}
+
+.preview-details-modal .modal-header {
+    border-bottom-color: #d3bd8b;
+    background: #fffaf0;
+    color: #3e2a1e;
+}
+
+.preview-details-modal .modal-body {
+    background: #fffdf8;
+    color: #3e2a1e;
+}
+
+.preview-details-modal #previewDetailsDescription {
+    white-space: pre-line;
 }
 
 .table tbody td.library-empty-state-cell {

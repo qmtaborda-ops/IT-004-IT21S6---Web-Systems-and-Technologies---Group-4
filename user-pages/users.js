@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function () {
-    /* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
     const termsCheck = document.getElementById('termsCheck');
     const confirmBtn = document.getElementById('confirmBorrowBtn');
     const borrowDateInput = document.getElementById('borrowDate');
@@ -20,31 +19,21 @@ document.addEventListener('DOMContentLoaded', function () {
     borrowDateInput.addEventListener('change', function () {
         const borrowVal = this.value;
         if (!borrowVal) return;
-
         const borrow = new Date(borrowVal);
-
         const defaultReturn = new Date(borrow);
         defaultReturn.setMonth(defaultReturn.getMonth() + 1);
-
         const maxReturn = new Date(borrow);
         maxReturn.setMonth(maxReturn.getMonth() + 2);
-
-        const defaultStr = defaultReturn.toISOString().split('T')[0];
-        const maxStr = maxReturn.toISOString().split('T')[0];
-
-        returnDateInput.value = defaultStr;
-        returnDateInput.setAttribute('max', maxStr);
+        returnDateInput.value = defaultReturn.toISOString().split('T')[0];
+        returnDateInput.setAttribute('max', maxReturn.toISOString().split('T')[0]);
         returnDateInput.setAttribute('min', borrowVal);
-
         returnDateInput.dispatchEvent(new Event('change'));
     });
 
     returnDateInput.addEventListener('change', function () {
         const borrowVal = borrowDateInput.value;
         const returnVal = this.value;
-
         if (!borrowVal || !returnVal) return;
-
         const borrow = new Date(borrowVal);
         const ret = new Date(returnVal);
         const diffDays = Math.ceil((ret - borrow) / (1000 * 60 * 60 * 24));
@@ -59,39 +48,13 @@ document.addEventListener('DOMContentLoaded', function () {
             dateError.style.display = 'none';
         }
     });
-
-    confirmBtn.addEventListener('click', function () {
-        if (!borrowDateInput.value || !returnDateInput.value) {
-            alert("Please select both dates.");
-            return;
-        }
-        if (!termsCheck.checked) {
-            alert("Please agree to the terms.");
-            return;
-        }
-        if (dateError.style.display === 'block') {
-            alert("Please fix the date errors.");
-            return;
-        }
-
-        notification.style.display = 'block';
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-
-        borrowForm.reset();
-        confirmBtn.disabled = true;
-        dateError.style.display = 'none';
-
-        const modalInstance = bootstrap.Modal.getInstance(borrowModal);
-        modalInstance.hide();
-    });
-
 });
 
 const API_URL = '../database/';
 let selectedBookId = null;
 let selectedBookTitle = '';
+let bookCache = {};
 
-// Helper function to hide/show the empty messages
 function updateEmptyMessage(pane) {
     const message = pane.querySelector(".library-empty-state");
     if (!message) return;
@@ -99,16 +62,26 @@ function updateEmptyMessage(pane) {
     message.style.display = rows.length === 0 ? "block" : "none";
 }
 
-let bookCache = {};
-
-function escapeHtml(value) {
-    const div = document.createElement('div');
-    div.textContent = value == null ? '' : String(value);
-    return div.innerHTML;
-}
-
-// Open the book details modal (cover, author, overview) when a title is clicked
 let detailsBookId = null;
+
+const greetingText = document.querySelector('.library-user-btn span').textContent;
+const currentUserName = greetingText.replace('Have a good day, ', '').replace('.', '').trim();
+
+// THE ULTIMATE LOGIC
+function determineDisplayStatus(book) {
+    let isBorrowedByMe = false;
+    if (book.borrower_name && book.borrower_name.includes(currentUserName)) {
+        isBorrowedByMe = true;
+    }
+
+    if (isBorrowedByMe) {
+        return 'Borrowed';
+    } else if (book.quantity > 0) {
+        return 'Available';
+    } else {
+        return 'Out of Stock';
+    }
+}
 
 document.addEventListener('click', function (event) {
     const link = event.target.closest('.book-details-link');
@@ -125,9 +98,11 @@ document.addEventListener('click', function (event) {
     document.getElementById('detailsDescription').textContent =
         book.description && book.description.trim() ? book.description : 'No description available for this book.';
 
+    let displayStatus = determineDisplayStatus(book);
+
     const statusEl = document.getElementById('detailsStatus');
-    statusEl.textContent = book.status;
-    statusEl.className = 'book-status book-status-' + book.status.toLowerCase().replace(/\s+/g, '');
+    statusEl.textContent = displayStatus;
+    statusEl.className = 'book-status book-status-' + displayStatus.toLowerCase().replace(/\s+/g, '');
 
     const img = document.getElementById('detailsCover');
     const placeholder = document.getElementById('detailsNoCover');
@@ -140,16 +115,22 @@ document.addEventListener('click', function (event) {
         placeholder.style.display = 'flex';
     }
 
-    document.getElementById('detailsBorrowWrap').style.display = book.status === 'Available' ? '' : 'none';
+    document.getElementById('detailsBorrowWrap').style.display = (displayStatus === 'Available' && book.quantity > 0) ? '' : 'none';
     bootstrap.Modal.getOrCreateInstance(document.getElementById('detailsModal')).show();
 });
 
-// "Borrow this book" inside the details popup -> hand over to the normal borrow popup
 document.getElementById('detailsBorrowBtn').addEventListener('click', function () {
     const book = bookCache[detailsBookId];
     if (!book) return;
     selectedBookId = String(book.id);
     selectedBookTitle = book.title;
+    
+    const qtyInput = document.getElementById('borrowQuantity');
+    if (qtyInput) {
+        qtyInput.setAttribute('max', book.quantity);
+        qtyInput.value = 1;
+    }
+
     const detailsEl = document.getElementById('detailsModal');
     detailsEl.addEventListener('hidden.bs.modal', function openBorrow() {
         detailsEl.removeEventListener('hidden.bs.modal', openBorrow);
@@ -160,13 +141,14 @@ document.getElementById('detailsBorrowBtn').addEventListener('click', function (
 
 async function loadUserBooks() {
     try {
-        const res = await fetch(API_URL + 'get_books.php');
+        const res = await fetch(API_URL + 'get_books.php?t=' + new Date().getTime());
         const books = await res.json();
 
-        // Clear existing rows
         document.querySelectorAll(".tab-pane tbody").forEach(tbody => tbody.innerHTML = "");
+        bookCache = {}; 
 
         books.forEach(book => {
+            bookCache[String(book.id)] = book;
             if (book.is_hidden == 1) return;
 
             const pane = document.getElementById(book.genre_id);
@@ -174,13 +156,13 @@ async function loadUserBooks() {
                 const tbody = pane.querySelector("tbody");
                 const tr = document.createElement("tr");
 
-                // Simplified status logic (Ready for future copies update)
-                const statusTag = book.status.toLowerCase().replace(/\s+/g, "");
-                const statusBadge = `<span class='book-status book-status-${statusTag}'>${book.status}</span>`;
+                let displayStatus = determineDisplayStatus(book);
+                const statusTag = displayStatus.toLowerCase().replace(/\s+/g, "");
+                const statusBadge = `<span class='book-status book-status-${statusTag}'>${displayStatus}</span>`;
 
                 let actionHtml = "";
-                if (book.status === "Available") {
-                    actionHtml = `<button class="btn btn-sm btn-success borrow-btn" data-id="${book.id}" data-bs-toggle="modal" data-bs-target="#borrowModal"><i class="bi bi-book"></i> Borrow</button>`;
+                if (displayStatus === "Available" && book.quantity > 0) {
+                    actionHtml = `<button class="btn btn-sm btn-success borrow-btn" data-id="${book.id}" data-max="${book.quantity}" data-bs-toggle="modal" data-bs-target="#borrowModal"><i class="bi bi-book"></i> Borrow</button>`;
                 }
 
                 const thumb = book.cover_hash
@@ -188,9 +170,10 @@ async function loadUserBooks() {
                     : '';
 
                 tr.innerHTML = `
-                    <td>${thumb}<a href="#" class="book-details-link" data-id="${book.id}" style="color:inherit;font-weight:600;text-decoration:underline dotted;">${escapeHtml(book.title)}</a></td>
+                    <td>${thumb}<a href="#" class="book-details-link" data-id="${book.id}" style="color:inherit;font-weight:600;text-decoration:underline dotted;">${book.title}</a></td>
                     <td>${book.author}</td>
                     <td>${book.year}</td>
+                    <td>${book.quantity || 0}</td>
                     <td>${statusBadge}</td>
                     <td>${book.call_no}</td>
                     <td class="text-center">${actionHtml}</td>
@@ -199,17 +182,18 @@ async function loadUserBooks() {
             }
         });
 
-        bookCache = {};
-        books.forEach(b => { bookCache[String(b.id)] = b; });
-
-        // Hide empty states for tabs that now have books (OUTSIDE THE LOOP)
         document.querySelectorAll(".tab-pane").forEach(updateEmptyMessage);
 
-        // Attach click events to the new borrow buttons
         document.querySelectorAll('.borrow-btn').forEach(btn => {
             btn.addEventListener('click', function () {
                 selectedBookId = this.getAttribute('data-id');
                 selectedBookTitle = this.closest('tr').querySelector('td').textContent.trim();
+                const maxQty = this.getAttribute('data-max');
+                const qtyInput = document.getElementById('borrowQuantity');
+                if (qtyInput) {
+                    qtyInput.setAttribute('max', maxQty);
+                    qtyInput.value = 1;
+                }
             });
         });
 
@@ -223,22 +207,18 @@ loadUserBooks();
 document.getElementById('confirmBorrowBtn').addEventListener('click', async function () {
     const borrowDateInput = document.getElementById('borrowDate');
     const returnDateInput = document.getElementById('returnDate');
+    const borrowQuantityInput = document.getElementById('borrowQuantity');
     const termsCheck = document.getElementById('termsCheck');
     const dateError = document.getElementById('dateError');
     const notification = document.getElementById('borrowNotification');
     const borrowForm = document.getElementById('borrowForm');
     const borrowModal = document.getElementById('borrowModal');
 
-    if (!borrowDateInput.value || !returnDateInput.value || !termsCheck.checked || dateError.style.display === 'block') {
-        return;
-    }
+    if (!borrowDateInput.value || !returnDateInput.value || !termsCheck.checked || dateError.style.display === 'block') return;
 
     if (selectedBookId) {
         try {
-            const borrowedOn = borrowDateInput.value;
-            const dueOn = returnDateInput.value;
-            const bookId = selectedBookId;
-            const bookTitle = selectedBookTitle;
+            const qty = borrowQuantityInput ? borrowQuantityInput.value : 1;
 
             const borrowRes = await fetch(API_URL + 'borrow_book.php', {
                 method: 'POST',
@@ -246,6 +226,7 @@ document.getElementById('confirmBorrowBtn').addEventListener('click', async func
                 credentials: 'include',
                 body: JSON.stringify({
                     book_id: selectedBookId,
+                    quantity: qty,
                     borrow_date: borrowDateInput.value,
                     return_date: returnDateInput.value
                 })
@@ -256,16 +237,12 @@ document.getElementById('confirmBorrowBtn').addEventListener('click', async func
             if (result.success) {
                 notification.style.display = 'block';
                 window.scrollTo({ top: 0, behavior: 'smooth' });
-
                 borrowForm.reset();
                 this.disabled = true;
                 dateError.style.display = 'none';
-
-                saveBorrowRecord(bookId, bookTitle, borrowedOn, dueOn);
-
+                
                 const modalInstance = bootstrap.Modal.getInstance(borrowModal);
                 modalInstance.hide();
-
                 loadUserBooks();
             } else {
                 alert("Error: " + result.error);
@@ -277,172 +254,7 @@ document.getElementById('confirmBorrowBtn').addEventListener('click', async func
     }
 });
 
-/* ---------- My Account modal (front-end only) ---------- */
-const FINE_PER_DAY = 10;
-const BORROW_STORE_KEY = 'bookersClubBorrows';
-
-function loadBorrowRecords() {
-    try {
-        return JSON.parse(localStorage.getItem(BORROW_STORE_KEY)) || [];
-    } catch (err) {
-        return [];
-    }
-}
-
-function storeBorrowRecords(records) {
-    try {
-        localStorage.setItem(BORROW_STORE_KEY, JSON.stringify(records));
-    } catch (err) {
-        console.error(err);
-    }
-}
-
-function saveBorrowRecord(bookId, title, borrowDate, returnDate) {
-    const records = loadBorrowRecords();
-    records.push({
-        book_id: String(bookId),
-        title: title,
-        borrow_date: borrowDate,
-        return_date: returnDate,
-        status: 'In Process',
-        seenOut: false,
-        closed: false,
-        outcome: '',
-        price: null
-    });
-    storeBorrowRecords(records);
-}
-
-async function syncBorrowRecords() {
-    const records = loadBorrowRecords();
-    if (!records.some(function (r) { return !r.closed; })) return records;
-
-    try {
-        const res = await fetch(API_URL + 'get_books.php');
-        const books = await res.json();
-        const byId = {};
-        books.forEach(function (b) { byId[String(b.id)] = b; });
-
-        records.forEach(function (r) {
-            if (r.closed) return;
-            const book = byId[r.book_id];
-            if (!book) return;
-
-            if (book.status === 'Available') {
-                if (r.seenOut) {
-                    r.closed = true;
-                    r.outcome = 'Returned';
-                }
-            } else if (book.status === 'Damaged' || book.status === 'Missing') {
-                r.closed = true;
-                r.outcome = book.status;
-                r.price = book.price != null ? Number(book.price) : null;
-            } else {
-                r.seenOut = true;
-                r.status = book.status;
-            }
-        });
-        storeBorrowRecords(records);
-    } catch (err) {
-        console.error(err);
-    }
-    return records;
-}
-
-function escapeHtml(value) {
-    const div = document.createElement('div');
-    div.textContent = value == null ? '' : value;
-    return div.innerHTML;
-}
-
-function formatPeso(amount) {
-    return '\u20B1' + Number(amount || 0).toLocaleString('en-PH', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-    });
-}
-
-function daysOverdue(returnDate) {
-    if (!returnDate) return 0;
-    const due = new Date(returnDate + 'T00:00:00');
-    const now = new Date();
-    now.setHours(0, 0, 0, 0);
-    return Math.max(0, Math.round((now - due) / 86400000));
-}
-
-function accountStatusClass(status) {
-    switch ((status || '').toLowerCase()) {
-        case 'returned': return 'book-status-available';
-        case 'borrowed': return 'book-status-borrowed';
-        case 'in process': return 'book-status-inprocess';
-        case 'overdue':
-        case 'missing': return 'book-status-missing';
-        default: return 'book-status-damaged';
-    }
-}
-
-function accountPill(status) {
-    return '<span class="book-status ' + accountStatusClass(status) + '">' + escapeHtml(status) + '</span>';
-}
-
-function setAccountMessage(tbodyId, cols, message) {
-    document.getElementById(tbodyId).innerHTML =
-        '<tr><td colspan="' + cols + '" class="text-center fst-italic">' + message + '</td></tr>';
-}
-
-function renderAccount(records) {
-    const current = records.filter(function (r) { return !r.closed; }).reverse();
-    const history = records.filter(function (r) { return r.closed; }).reverse();
-
-    if (!current.length) {
-        setAccountMessage('currentBorrowsBody', 4, 'You have no borrowed books right now');
-    } else {
-        document.getElementById('currentBorrowsBody').innerHTML = current.map(function (r) {
-            const status = daysOverdue(r.return_date) > 0 && r.seenOut ? 'Overdue' : r.status;
-            return '<tr><td>' + escapeHtml(r.title) + '</td><td>' + escapeHtml(r.borrow_date) +
-                '</td><td>' + escapeHtml(r.return_date) + '</td><td>' + accountPill(status) + '</td></tr>';
-        }).join('');
-    }
-
-    if (!history.length) {
-        setAccountMessage('historyBody', 4, 'No borrowing history yet');
-    } else {
-        document.getElementById('historyBody').innerHTML = history.map(function (r) {
-            return '<tr><td>' + escapeHtml(r.title) + '</td><td>' + escapeHtml(r.borrow_date) +
-                '</td><td>' + escapeHtml(r.return_date) + '</td><td>' + accountPill(r.outcome) + '</td></tr>';
-        }).join('');
-    }
-
-    const liabilities = [];
-    current.forEach(function (r) {
-        const days = daysOverdue(r.return_date);
-        if (r.seenOut && days > 0) {
-            liabilities.push({
-                title: r.title,
-                reason: 'Late return (' + days + ' day' + (days === 1 ? '' : 's') + ' overdue)',
-                amount: days * FINE_PER_DAY
-            });
-        }
-    });
-    history.forEach(function (r) {
-        if (r.outcome === 'Damaged' || r.outcome === 'Missing') {
-            liabilities.push({ title: r.title, reason: r.outcome + ' book (price of book)', amount: r.price });
-        }
-    });
-
-    let total = 0;
-    if (!liabilities.length) {
-        setAccountMessage('liabilitiesBody', 3, 'No outstanding liabilities');
-    } else {
-        document.getElementById('liabilitiesBody').innerHTML = liabilities.map(function (l) {
-            if (l.amount != null) total += l.amount;
-            return '<tr><td>' + escapeHtml(l.title) + '</td><td>' + escapeHtml(l.reason) +
-                '</td><td class="text-end">' + (l.amount != null ? formatPeso(l.amount) : 'Price not set') + '</td></tr>';
-        }).join('');
-    }
-    document.getElementById('liabilitiesTotal').textContent = formatPeso(total);
-}
-
+/* ---------- My Account & History Modals (Database Driven) ---------- */
 const accountModal = document.getElementById('accountModal');
 const accountViews = { account: 'accountView', history: 'historyView', liabilities: 'liabilitiesView' };
 const accountTitles = { account: 'My Account', history: 'Borrowed History', liabilities: 'Liabilities' };
@@ -458,6 +270,78 @@ function showAccountView(name) {
     });
 }
 
+function escapeHtml(value) {
+    const div = document.createElement('div');
+    div.textContent = value == null ? '' : value;
+    return div.innerHTML;
+}
+
+function accountStatusClass(status) {
+    switch ((status || '').toLowerCase()) {
+        case 'returned': 
+        case 'available': return 'book-status-available';
+        case 'borrowed': 
+        case 'approved': return 'book-status-borrowed';
+        case 'in process': 
+        case 'pending': return 'book-status-inprocess';
+        case 'out of stock':
+        case 'overdue':
+        case 'missing': return 'book-status-missing';
+        default: return 'book-status-damaged';
+    }
+}
+
+function accountPill(status) {
+    return '<span class="book-status ' + accountStatusClass(status) + '">' + escapeHtml(status) + '</span>';
+}
+
+async function loadUserHistory() {
+    try {
+        const res = await fetch(API_URL + 'get_user_history.php?t=' + new Date().getTime(), { credentials: 'include' });
+        const records = await res.json();
+
+        const currentTbody = document.getElementById('currentBorrowsBody');
+        const historyTbody = document.getElementById('historyBody');
+
+        if (!Array.isArray(records) || records.length === 0) {
+            currentTbody.innerHTML = '<tr><td colspan="4" class="text-center fst-italic">No borrowed books found.</td></tr>';
+            historyTbody.innerHTML = '<tr><td colspan="4" class="text-center fst-italic">No history found.</td></tr>';
+            return;
+        }
+
+        const current = records.filter(r => r.status === 'Pending' || r.status === 'Approved');
+        const past = records.filter(r => r.status === 'Returned');
+
+        if (current.length === 0) {
+            currentTbody.innerHTML = '<tr><td colspan="4" class="text-center fst-italic">You have no borrowed books right now.</td></tr>';
+        } else {
+            currentTbody.innerHTML = current.map(r => `
+                <tr>
+                    <td>${escapeHtml(r.title)}</td>
+                    <td>${escapeHtml(r.borrow_date)}</td>
+                    <td>${escapeHtml(r.return_date)}</td>
+                    <td>${accountPill(r.status)}</td>
+                </tr>
+            `).join('');
+        }
+
+        if (past.length === 0) {
+            historyTbody.innerHTML = '<tr><td colspan="4" class="text-center fst-italic">No past history yet.</td></tr>';
+        } else {
+            historyTbody.innerHTML = past.map(r => `
+                <tr>
+                    <td>${escapeHtml(r.title)}</td>
+                    <td>${escapeHtml(r.borrow_date)}</td>
+                    <td>${escapeHtml(r.return_date)}</td>
+                    <td>${accountPill(r.status)}</td>
+                </tr>
+            `).join('');
+        }
+    } catch (err) {
+        console.error("Error loading history:", err);
+    }
+}
+
 document.querySelectorAll('[data-open-view]').forEach(function (item) {
     item.addEventListener('click', function () {
         pendingAccountView = this.dataset.openView;
@@ -471,9 +355,8 @@ document.querySelectorAll('.account-menu-item').forEach(function (item) {
     });
 });
 
-accountModal.addEventListener('show.bs.modal', async function () {
+accountModal.addEventListener('show.bs.modal', function () {
     showAccountView(pendingAccountView);
     pendingAccountView = 'account';
-    renderAccount(loadBorrowRecords());
-    renderAccount(await syncBorrowRecords());
+    loadUserHistory();
 });

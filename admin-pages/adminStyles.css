@@ -197,8 +197,7 @@ body {
 }
 /* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
 .book-status-available { color: #4c6b3f; border-color: #4c6b3f; background: rgba(76,107,63,0.12); }
-.book-status-borrowed  { color: #a15c2f; border-color: #a15c2f; background: rgba(161,92,47,0.12); }
-.book-status-inprocess { color: #5b7a8c; border-color: #5b7a8c; background: rgba(91,122,140,0.12); }
+.book-status-outofstock { color: #d9534f; border-color: #d9534f; background: rgba(217, 83, 79, 0.12);}
 .book-status-missing   { color: #8b3a3a; border-color: #8b3a3a; background: rgba(139,58,58,0.12); }
 .book-status-damaged   { color: #7a6a53; border-color: #7a6a53; background: rgba(122,106,83,0.12); }
 

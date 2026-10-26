@@ -1,0 +1,332 @@
+<?php
+session_start();
+if (!isset($_SESSION['admin_id'])) {
+    header("Location: ../landing-page/landing.html");
+    exit;
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management System · Booker's Club</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet">
+    <link href="adminStyles.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
+</head>
+<body>
+    <div class="library-page">
+        <div class="library-page-content">
+            <div class="library-catalog">
+                <!-- Header -->
+                <div class="library-catalog-header">
+                    <div class="d-flex align-items-center gap-3">
+                        <img src="../images/CompanyLogo.png" alt="Company Logo" class="library-role-badge-img">
+                        <div>
+                            <h1>Booker's Club</h1>
+                            <span class="library-role-badge">Management - Inventory System</span>
+                        </div>
+                    </div>
+                    <div class="library-user-tools">
+                        <div class="library-user-greeting dropdown">
+                            <button type="button" class="library-user-btn" id="adminMenuBtn" data-bs-toggle="dropdown"
+                                aria-expanded="false" aria-label="Open admin menu">
+                                <span>Have a good day admin</span>
+                                <i class="bi bi-person-circle"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end account-menu" aria-labelledby="adminMenuBtn">
+                                <li><a class="dropdown-item" href="../database/log_out.php"><i
+                                            class="bi bi-box-arrow-right me-2"></i>Log Out</a></li>
+                            </ul>
+                        </div>
+                        <div class="library-user-search">
+                            <i class="bi bi-search"></i>
+                            <input type="text" id="bookSearch" placeholder="Search by title, author, or call number...">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Genre Tabs Navigation -->
+                <ul class="nav nav-tabs mb-0" id="genreTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="scifi-tab" data-bs-toggle="tab" data-bs-target="#scifi"
+                            type="button" role="tab" aria-controls="scifi" aria-selected="true">Sci-Fi & Cyberpunk</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="fantasy-tab" data-bs-toggle="tab" data-bs-target="#fantasy"
+                            type="button" role="tab" aria-controls="fantasy" aria-selected="false">Fantasy & Supernatural</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="action-tab" data-bs-toggle="tab" data-bs-target="#action"
+                            type="button" role="tab" aria-controls="action" aria-selected="false">Action, Adventure & Martial Arts</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="romance-tab" data-bs-toggle="tab" data-bs-target="#romance"
+                            type="button" role="tab" aria-controls="romance" aria-selected="false">Romance & Drama</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="mystery-tab" data-bs-toggle="tab" data-bs-target="#mystery"
+                            type="button" role="tab" aria-controls="mystery" aria-selected="false">Mystery, Horror & Psychological</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="academics-tab" data-bs-toggle="tab" data-bs-target="#academics"
+                            type="button" role="tab" aria-controls="academics" aria-selected="false">Academics, Non-Fiction & Skill Building</button>
+                    </li>
+                </ul>
+
+                <!-- Tab Content Panels -->
+                <div class="tab-content mt-2" id="genreTabsContent">
+                    <!-- 1. Sci-Fi & Cyberpunk -->
+                    <div class="tab-pane fade show active" id="scifi" role="tabpanel" aria-labelledby="scifi-tab">
+                        <div class="book-table-wrap">
+                            <div class="add-row">
+                                <button type="button" class="add-btn">+ Add book</button>
+                            </div>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Author</th>
+                                        <th>Year</th>
+                                        <th>Qty</th>
+                                        <th>Status</th>
+                                        <th>Call No.</th>
+                                        <th>Borrowers</th>
+                                        <th class="text-end">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                            <div class="book-empty-state">
+                                <i class="bi bi-journal-x"></i>
+                                <p>No titles in this genre yet</p>
+                                <span>Entries will appear here once added</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Fantasy & Supernatural -->
+                    <div class="tab-pane fade" id="fantasy" role="tabpanel" aria-labelledby="fantasy-tab">
+                        <div class="book-table-wrap">
+                            <div class="add-row">
+                                <button type="button" class="add-btn">+ Add book</button>
+                            </div>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Author</th>
+                                        <th>Year</th>
+                                        <th>Qty</th>
+                                        <th>Status</th>
+                                        <th>Call No.</th>
+                                        <th>Borrower</th>
+                                        <th class="text-end">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                            <div class="book-empty-state">
+                                <i class="bi bi-journal-x"></i>
+                                <p>No titles in this genre yet</p>
+                                <span>Entries will appear here once added</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. Action, Adventure & Martial Arts -->
+                    <div class="tab-pane fade" id="action" role="tabpanel" aria-labelledby="action-tab">
+                        <div class="book-table-wrap">
+                            <div class="add-row">
+                                <button type="button" class="add-btn">+ Add book</button>
+                            </div>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Author</th>
+                                        <th>Year</th>
+                                        <th>Qty</th>
+                                        <th>Status</th>
+                                        <th>Call No.</th>
+                                        <th>Borrower</th>
+                                        <th class="text-end">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                            <div class="book-empty-state">
+                                <i class="bi bi-journal-x"></i>
+                                <p>No titles in this genre yet</p>
+                                <span>Entries will appear here once added</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. Romance & Drama -->
+                    <div class="tab-pane fade" id="romance" role="tabpanel" aria-labelledby="romance-tab">
+                        <div class="book-table-wrap">
+                            <div class="add-row">
+                                <button type="button" class="add-btn">+ Add book</button>
+                            </div>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Author</th>
+                                        <th>Year</th>
+                                        <th>Qty</th>
+                                        <th>Status</th>
+                                        <th>Call No.</th>
+                                        <th>Borrower</th>
+                                        <th class="text-end">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                            <div class="book-empty-state">
+                                <i class="bi bi-journal-x"></i>
+                                <p>No titles in this genre yet</p>
+                                <span>Entries will appear here once added</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 5. Mystery, Horror & Psychological -->
+                    <div class="tab-pane fade" id="mystery" role="tabpanel" aria-labelledby="mystery-tab">
+                        <div class="book-table-wrap">
+                            <div class="add-row">
+                                <button type="button" class="add-btn">+ Add book</button>
+                            </div>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Author</th>
+                                        <th>Year</th>
+                                        <th>Qty</th>
+                                        <th>Status</th>
+                                        <th>Call No.</th>
+                                        <th>Borrower</th>
+                                        <th class="text-end">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                            <div class="book-empty-state">
+                                <i class="bi bi-journal-x"></i>
+                                <p>No titles in this genre yet</p>
+                                <span>Entries will appear here once added</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 6. Academics, Non-Fiction & Skill Building -->
+                    <div class="tab-pane fade" id="academics" role="tabpanel" aria-labelledby="academics-tab">
+                        <div class="book-table-wrap">
+                            <div class="add-row">
+                                <button type="button" class="add-btn">+ Add book</button>
+                            </div>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Author</th>
+                                        <th>Year</th>
+                                        <th>Qty</th>
+                                        <th>Status</th>
+                                        <th>Call No.</th>
+                                        <th>Borrower</th>
+                                        <th class="text-end">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                            <div class="book-empty-state">
+                                <i class="bi bi-journal-x"></i>
+                                <p>No titles in this genre yet</p>
+                                <span>Entries will appear here once added</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="library-footer">
+                    <span>Group 4 Prototype Library System</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add / Edit Book Modal -->
+    <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <form class="modal-content" id="addForm" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addModalTitle">Add book</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label class="form-label" for="addTitle">Title</label>
+                    <input class="form-control mb-2" id="addTitle" required>
+
+                    <label class="form-label" for="addAuthor">Author</label>
+                    <input class="form-control mb-2" id="addAuthor" required>
+
+                    <label class="form-label" for="addYear">Year</label>
+                    <input class="form-control mb-2" id="addYear" required>
+
+                    <label class="form-label" for="addQuantity">Quantity</label>
+                    <input type="number" class="form-control mb-2" id="addQuantity" min="0" value="1" required>
+
+                    <label class="form-label" for="addCall">Call no.</label>
+                    <input class="form-control mb-2" id="addCall" required>
+
+                    <label class="form-label" for="addDescription">Description</label>
+                    <textarea class="form-control mb-2" id="addDescription" rows="3"></textarea>
+
+                    <label class="form-label" for="addCover">Cover image <small>(Max 800KB)</small></label>
+                    <input type="file" class="form-control mb-2" id="addCover" accept="image/jpeg,image/png,image/webp,image/gif">
+                    <div id="coverPreviewWrap" class="mb-2" style="display:none;">
+                        <img id="coverPreview" alt="Cover preview" style="max-height:140px; border-radius:6px; border:1px solid #ddd;">
+                        <div class="form-check mt-1" id="removeCoverWrap" style="display:none;">
+                            <input class="form-check-input" type="checkbox" id="removeCover">
+                            <label class="form-check-label" for="removeCover">Remove current image</label>
+                        </div>
+                    </div>
+
+                    <label class="form-label" for="addGenre">Genre</label>
+                    <select class="form-select mb-2" id="addGenre">
+                        <option value="scifi">Sci-Fi &amp; Cyberpunk</option>
+                        <option value="fantasy">Fantasy &amp; Supernatural</option>
+                        <option value="action">Action, Adventure &amp; Martial Arts</option>
+                        <option value="romance">Romance &amp; Drama</option>
+                        <option value="mystery">Mystery, Horror &amp; Psychological</option>
+                        <option value="academics">Academics, Non-Fiction &amp; Skill Building</option>
+                    </select>
+
+                    <label class="form-label" for="addStatus">Status</label>
+                    <select class="form-select" id="addStatus">
+                        <option>Available</option>
+                        <option>Borrowed</option>
+                        <option>In Process</option>
+                        <option>Out of Stock</option>
+                        <option>Missing</option>
+                        <option>Damaged</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="save-btn">Save book</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="../search.js?v=13" defer></script>
+    <script src="admin.js?v=13"></script>
+</body>
+</html>

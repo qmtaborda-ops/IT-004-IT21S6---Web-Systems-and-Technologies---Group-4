@@ -242,10 +242,7 @@ body {
     max-width: 140px;
     height: 132px;
     margin: 0 auto;
-    border: 1px solid #8d6a3b;
-    border-radius: 3px;
     object-fit: contain;
-    box-shadow: 2px 3px 5px rgba(62, 42, 30, 0.2);
 }
 
 .catalog-book-cover-placeholder {
@@ -263,6 +260,9 @@ body {
 }
 
 .catalog-book-details {
+    display: block;
+    width: 100%;
+    overflow: hidden;
     padding: 0;
     border: 0;
     background: transparent;
@@ -271,6 +271,8 @@ body {
     font-weight: 700;
     text-decoration: underline dotted #8d6a3b;
     text-underline-offset: 3px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     cursor: pointer;
 }
 
@@ -282,6 +284,13 @@ body {
 .catalog-book-details:focus-visible {
     outline: 2px solid #c9a227;
     outline-offset: 3px;
+}
+
+.catalog-mobile-heading,
+.catalog-mobile-cover,
+.catalog-mobile-cover-placeholder,
+.catalog-mobile-year {
+    display: none;
 }
 
 #previewDetailsCover {
@@ -406,6 +415,162 @@ body {
 .table th:nth-child(2),
 .table td:nth-child(2) {
     border-right: 4px solid #5b3d29;
+}
+
+@media (max-width: 767.98px) {
+    #catalog .d-flex.align-items-start {
+        align-items: stretch !important;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    #genre-tabs {
+        display: flex;
+        width: 100%;
+        min-height: 0;
+        flex: 0 0 auto;
+        overflow-x: auto;
+        overflow-y: hidden;
+        border-bottom-left-radius: 0;
+    }
+
+    #genre-tabs .nav-item {
+        flex: 0 0 auto;
+    }
+
+    #genre-tabs .nav-link,
+    #genre-tabs .nav-link.active {
+        width: auto;
+        border-radius: 4px 4px 0 0;
+        white-space: nowrap;
+    }
+
+    #genre-tabs-content {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .library-table-wrap {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    #catalog .table {
+        width: 100%;
+        min-width: 0;
+        height: auto;
+        display: block;
+    }
+
+    #catalog .table thead,
+    #catalog .table tbody {
+        display: block;
+    }
+
+    #catalog .table thead tr,
+    #catalog .table tbody tr:not(.library-empty-state-row) {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    #catalog .table thead th:not(.catalog-mobile-heading) {
+        display: none;
+    }
+
+    #catalog .table thead th.catalog-mobile-heading {
+        display: block;
+        min-width: 0;
+        height: auto;
+        padding: 0.65rem 0.4rem;
+        font-size: 0.68rem;
+        overflow-wrap: anywhere;
+    }
+
+    #catalog .table thead th.catalog-mobile-heading:not(:last-child) {
+        border-right: 4px solid #5b3d29;
+    }
+
+    #catalog .table tbody tr:not(.library-empty-state-row) .catalog-cover-cell,
+    #catalog .table tbody tr:not(.library-empty-state-row) .catalog-year-cell {
+        display: none;
+    }
+
+    #catalog .table tbody tr:not(.library-empty-state-row) .catalog-title-cell,
+    #catalog .table tbody tr:not(.library-empty-state-row) .catalog-author-cell {
+        min-width: 0;
+        padding: 0.65rem 0.4rem;
+        overflow-wrap: anywhere;
+    }
+
+    .catalog-title-entry {
+        display: flex;
+        width: 100%;
+        min-width: 0;
+        align-items: center;
+        gap: 0.5rem;
+        text-align: left;
+    }
+
+    .catalog-mobile-cover {
+        display: block;
+        width: 44px;
+        height: 64px;
+        flex: 0 0 44px;
+        object-fit: contain;
+    }
+
+    .catalog-mobile-cover-placeholder {
+        display: flex;
+        width: 44px;
+        height: 64px;
+        flex: 0 0 44px;
+        align-items: center;
+        justify-content: center;
+        border: 1px dashed #8d6a3b;
+        border-radius: 3px;
+        color: #8d6a3b;
+        font-size: 1.2rem;
+    }
+
+    .catalog-book-details {
+        flex: 1 1 0;
+        min-width: 0;
+        text-align: left;
+    }
+
+    .catalog-mobile-year {
+        display: block;
+        margin-top: 0.25rem;
+        color: #6b5a45;
+        font-size: 0.8rem;
+    }
+
+    #catalog .table tbody tr.catalog-see-more-row {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    #catalog .table tbody td.catalog-see-more-cell {
+        grid-column: 1 / -1;
+        background-image: linear-gradient(
+            to right,
+            transparent calc(50% - 4px),
+            #5b3d29 calc(50% - 4px),
+            #5b3d29 50%,
+            transparent 50%
+        );
+    }
+
+    #catalog .table tbody tr.library-empty-state-row {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    #catalog .library-empty-state {
+        min-height: 150px;
+        padding: 1rem 0.5rem;
+    }
 }
 
 .library-empty-state {

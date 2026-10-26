@@ -42,6 +42,19 @@ async function loadCatalogPreview() {
 
         const booksByGenre = new Map(tableBodies.map(tbody => [tbody.dataset.genreId, []]));
 
+        tableBodies.forEach(tbody => {
+            const headerRow = tbody.closest('table').querySelector('thead tr');
+            if (headerRow.querySelector('.catalog-mobile-heading')) return;
+
+            ['Cover & Title', 'Author & Year'].forEach(label => {
+                const heading = document.createElement('th');
+                heading.className = 'catalog-mobile-heading';
+                heading.scope = 'col';
+                heading.textContent = label;
+                headerRow.appendChild(heading);
+            });
+        });
+
         books.forEach(book => {
             if (Number(book.is_hidden) === 1) return;
             previewBooks.set(String(book.id), book);
@@ -79,20 +92,40 @@ async function loadCatalogPreview() {
                 row.appendChild(coverCell);
 
                 const titleCell = document.createElement('td');
+                titleCell.className = 'catalog-title-cell';
+                const titleEntry = document.createElement('div');
+                titleEntry.className = 'catalog-title-entry';
+                const mobileCover = coverCell.firstElementChild.cloneNode(true);
+                mobileCover.classList.remove('catalog-book-cover', 'catalog-book-cover-placeholder');
+                mobileCover.classList.add(book.cover_hash ? 'catalog-mobile-cover' : 'catalog-mobile-cover-placeholder');
+                titleEntry.appendChild(mobileCover);
+
                 const titleButton = document.createElement('button');
                 titleButton.type = 'button';
                 titleButton.className = 'catalog-book-details';
                 titleButton.dataset.bookId = String(book.id);
                 titleButton.textContent = book.title || 'Untitled';
                 titleButton.setAttribute('aria-label', 'View details for ' + (book.title || 'untitled book'));
-                titleCell.appendChild(titleButton);
+                titleEntry.appendChild(titleButton);
+                titleCell.appendChild(titleEntry);
                 row.appendChild(titleCell);
 
-                [book.author, book.year].forEach(value => {
-                    const cell = document.createElement('td');
-                    cell.textContent = value == null ? '' : String(value);
-                    row.appendChild(cell);
-                });
+                const authorCell = document.createElement('td');
+                authorCell.className = 'catalog-author-cell';
+                const authorName = document.createElement('span');
+                authorName.className = 'catalog-author-name';
+                authorName.textContent = book.author == null ? '' : String(book.author);
+                authorCell.appendChild(authorName);
+                const mobileYear = document.createElement('span');
+                mobileYear.className = 'catalog-mobile-year';
+                mobileYear.textContent = book.year == null || book.year === '' ? '' : 'Year: ' + String(book.year);
+                authorCell.appendChild(mobileYear);
+                row.appendChild(authorCell);
+
+                const yearCell = document.createElement('td');
+                yearCell.className = 'catalog-year-cell';
+                yearCell.textContent = book.year == null ? '' : String(book.year);
+                row.appendChild(yearCell);
                 tbody.appendChild(row);
             });
 

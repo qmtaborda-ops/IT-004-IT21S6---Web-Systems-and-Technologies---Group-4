@@ -426,23 +426,31 @@ body {
 
     #genre-tabs {
         display: flex;
+        flex-flow: row wrap !important;
+        gap: 0.35rem;
         width: 100%;
         min-height: 0;
         flex: 0 0 auto;
-        overflow-x: auto;
-        overflow-y: hidden;
+        overflow: visible;
+        border-bottom: 0;
         border-bottom-left-radius: 0;
     }
 
     #genre-tabs .nav-item {
-        flex: 0 0 auto;
+        min-width: 0;
+        flex: 1 1 calc(50% - 0.35rem);
     }
 
     #genre-tabs .nav-link,
     #genre-tabs .nav-link.active {
-        width: auto;
-        border-radius: 4px 4px 0 0;
-        white-space: nowrap;
+        width: 100%;
+        height: 100%;
+        padding: 0.6rem 0.7rem;
+        border-radius: 4px;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: clip;
+        line-height: 1.25;
     }
 
     #genre-tabs-content {
@@ -459,18 +467,28 @@ body {
     #catalog .table {
         width: 100%;
         min-width: 0;
-        height: auto;
-        display: block;
+        height: 410px;
+        display: flex;
+        flex-direction: column;
     }
 
-    #catalog .table thead,
-    #catalog .table tbody {
+    #catalog .table thead {
         display: block;
+        flex: 0 0 40px;
+    }
+
+    #catalog .table tbody {
+        display: flex;
+        min-height: 0;
+        flex: 1 1 auto;
+        flex-direction: column;
     }
 
     #catalog .table thead tr,
     #catalog .table tbody tr:not(.library-empty-state-row) {
         display: grid;
+        min-height: 0;
+        flex: 1 1 0;
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
@@ -548,6 +566,7 @@ body {
 
     #catalog .table tbody tr.catalog-see-more-row {
         display: grid;
+        flex: 0 0 auto;
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
@@ -564,11 +583,14 @@ body {
 
     #catalog .table tbody tr.library-empty-state-row {
         display: grid;
+        min-height: 0;
+        flex: 1 1 auto;
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     #catalog .library-empty-state {
-        min-height: 150px;
+        height: 100%;
+        min-height: 0;
         padding: 1rem 0.5rem;
     }
 }

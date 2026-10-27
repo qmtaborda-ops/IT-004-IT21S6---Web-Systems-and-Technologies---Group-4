@@ -3,27 +3,27 @@ const MAX_PREVIEW_BOOKS_PER_GENRE = 3;
 const previewBooks = new Map();
 
 function showBookDetails(book) {
-    document.getElementById('previewDetailsTitle').textContent = book.title || 'Untitled';
-    document.getElementById('previewDetailsAuthor').textContent = book.author || 'Unknown author';
-    document.getElementById('previewDetailsYear').textContent = book.year || 'Not specified';
-    document.getElementById('previewDetailsCall').textContent = book.call_no || 'Not specified';
-    document.getElementById('previewDetailsDescription').textContent =
-        book.description && book.description.trim() ? book.description : 'No description available for this book.';
+    $('#previewDetailsTitle').text(book.title || 'Untitled');
+    $('#previewDetailsAuthor').text(book.author || 'Unknown author');
+    $('#previewDetailsYear').text(book.year || 'Not specified');
+    $('#previewDetailsCall').text(book.call_no || 'Not specified');
+    $('#previewDetailsDescription').text(
+        book.description && book.description.trim() ? book.description : 'No description available for this book.'
+    );
 
-    const cover = document.getElementById('previewDetailsCover');
-    const noCover = document.getElementById('previewDetailsNoCover');
+    const $cover = $('#previewDetailsCover');
     if (book.cover_hash) {
-        cover.src = API_URL + 'get_cover.php?id=' + encodeURIComponent(book.id) + '&v=' + encodeURIComponent(book.cover_hash);
-        cover.alt = 'Cover of ' + (book.title || 'this book');
-        cover.hidden = false;
-        noCover.hidden = true;
+        $cover.attr({
+            src: API_URL + 'get_cover.php?id=' + encodeURIComponent(book.id) + '&v=' + encodeURIComponent(book.cover_hash),
+            alt: 'Cover of ' + (book.title || 'this book')
+        }).prop('hidden', false);
+        $('#previewDetailsNoCover').prop('hidden', true);
     } else {
-        cover.removeAttribute('src');
-        cover.hidden = true;
-        noCover.hidden = false;
+        $cover.removeAttr('src').prop('hidden', true);
+        $('#previewDetailsNoCover').prop('hidden', false);
     }
 
-    bootstrap.Modal.getOrCreateInstance(document.getElementById('previewDetailsModal')).show();
+    bootstrap.Modal.getOrCreateInstance($('#previewDetailsModal')[0]).show();
 }
 
 function renderCatalogCarousel(books) {
@@ -31,6 +31,8 @@ function renderCatalogCarousel(books) {
     track.replaceChildren();
 
     const visibleBooks = books.filter(book => book.cover_hash);
+    if (!visibleBooks.length) return;
+
     const coverGroup = document.createElement('div');
     coverGroup.className = 'catalog-carousel-group d-flex align-items-center gap-2';
     coverGroup.setAttribute('role', 'group');
@@ -70,7 +72,7 @@ function renderCatalogCarousel(books) {
     }
 
     updateCarouselMotion();
-    window.addEventListener('resize', updateCarouselMotion, { passive: true });
+    $(window).on('resize', updateCarouselMotion);
 }
 
 async function loadCatalogPreview() {
@@ -161,7 +163,6 @@ async function loadCatalogPreview() {
                 const authorCell = document.createElement('td');
                 authorCell.className = 'catalog-author-cell';
                 const authorName = document.createElement('span');
-                authorName.className = 'catalog-author-name';
                 authorName.textContent = book.author == null ? '' : String(book.author);
                 authorCell.appendChild(authorName);
                 const mobileYear = document.createElement('span');
@@ -219,20 +220,18 @@ async function loadCatalogPreview() {
     }
 }
 
-document.addEventListener('click', event => {
-    const button = event.target.closest('.catalog-book-details');
-    if (!button) return;
-    const book = previewBooks.get(button.dataset.bookId);
-    if (book) showBookDetails(book);
-});
-
-document.getElementById('previewDetailsCover').addEventListener('error', function () {
-    this.hidden = true;
-    document.getElementById('previewDetailsNoCover').hidden = false;
-});
-
 $(document).ready(function () {
     loadCatalogPreview();
+
+    $(document).on('click', '.catalog-book-details', function () {
+        const book = previewBooks.get($(this).attr('data-book-id'));
+        if (book) showBookDetails(book);
+    });
+
+    $('#previewDetailsCover').on('error', function () {
+        $(this).prop('hidden', true);
+        $('#previewDetailsNoCover').prop('hidden', false);
+    });
 
     const $navLinks = $('.navbar-nav .nav-link');
     const $sections = $('section[id], #catalog, #services, #about, #inquire');
@@ -276,11 +275,7 @@ $(document).ready(function () {
 
             $link.toggleClass('active', isActive);
 
-            if (isActive) {
-                $link.attr('aria-current', 'page');
-            } else {
-                $link.removeAttr('aria-current');
-            }
+            $link.attr('aria-current', isActive ? 'page' : null);
         });
     }
 
@@ -314,39 +309,37 @@ $(document).ready(function () {
     $(window).on('scroll', updateActiveNav);
     updateActiveNav();
 
-    const signupPassword = document.getElementById('user-pass');
-    const confirmPassword = document.getElementById('confirm-pass');
+    const $signupPassword = $('#user-pass');
+    const $confirmPassword = $('#confirm-pass');
 
     function validateSignupPasswords() {
-        confirmPassword.setCustomValidity(
-            confirmPassword.value && confirmPassword.value !== signupPassword.value
+        const confirmValue = $confirmPassword.val();
+        $confirmPassword[0].setCustomValidity(
+            confirmValue && confirmValue !== $signupPassword.val()
                 ? 'Passwords do not match.'
                 : ''
         );
     }
 
-    signupPassword.addEventListener('input', validateSignupPasswords);
-    confirmPassword.addEventListener('input', validateSignupPasswords);
+    $signupPassword.add($confirmPassword).on('input', validateSignupPasswords);
 
     $('[data-auth-form]').on('input', function () {
-        const message = this.querySelector('[data-auth-message]');
-        message.hidden = true;
-        message.textContent = '';
-        message.classList.remove('is-error', 'is-success');
+        $(this).find('[data-auth-message]')
+            .prop('hidden', true)
+            .text('')
+            .removeClass('is-error is-success');
     });
 
     $('[data-auth-form]').on('submit', async function (event) {
         event.preventDefault();
 
-        const form = this;
-        const formData = new FormData(form);
-        const message = form.querySelector('[data-auth-message]');
-        const action = form.dataset.authForm;
-        const payload = Object.fromEntries(formData.entries());
+        const $form = $(this);
+        const form = $form[0];
+        const message = $form.find('[data-auth-message]');
+        const action = $form.data('auth-form');
+        const payload = Object.fromEntries(new FormData(form).entries());
 
-        message.hidden = true;
-        message.textContent = '';
-        message.classList.remove('is-error', 'is-success');
+        message.prop('hidden', true).text('').removeClass('is-error is-success');
 
         try {
             const response = await fetch(API_URL + 'auth.php', {
@@ -373,10 +366,7 @@ $(document).ready(function () {
                 return;
             }
         } catch (error) {
-            message.textContent = error.message;
-            message.classList.add('is-error');
-            message.hidden = false;
-            message.setAttribute('role', 'alert');
+            message.text(error.message).addClass('is-error').prop('hidden', false).attr('role', 'alert');
         }
     });
 });

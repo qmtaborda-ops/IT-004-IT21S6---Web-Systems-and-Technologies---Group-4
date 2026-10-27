@@ -239,18 +239,35 @@ $(document).ready(function () {
 
     function updateActiveNav() {
         let currentId = '';
-        const scrollPosition = $(window).scrollTop() + 240;
+        let nearestSectionId = '';
+        let nearestSectionDistance = Infinity;
+        let firstSectionTop = Infinity;
+        const viewportCenter = $(window).scrollTop() + $(window).height() / 2;
 
         $sections.each(function () {
             const $section = $(this);
             const sectionTop = $section.offset().top;
             const sectionBottom = sectionTop + $section.outerHeight();
+            const distance = viewportCenter < sectionTop
+                ? sectionTop - viewportCenter
+                : viewportCenter - sectionBottom;
 
-            if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+            firstSectionTop = Math.min(firstSectionTop, sectionTop);
+
+            if (viewportCenter >= sectionTop && viewportCenter < sectionBottom) {
                 currentId = $section.attr('id');
                 return false;
             }
+
+            if (distance < nearestSectionDistance) {
+                nearestSectionDistance = distance;
+                nearestSectionId = $section.attr('id');
+            }
         });
+
+        if (!currentId && viewportCenter >= firstSectionTop) {
+            currentId = nearestSectionId;
+        }
 
         $navLinks.each(function () {
             const $link = $(this);
@@ -287,7 +304,7 @@ $(document).ready(function () {
         event.preventDefault();
 
         $('html, body').animate({
-            scrollTop: $(targetId).offset().top
+            scrollTop: $(targetId).offset().top + $(targetId).outerHeight() / 2 - $(window).height() / 2
         }, 400, function () {
             updateActiveNav();
         });

@@ -3,6 +3,8 @@ body {
     margin: 0;
     background: #f2e8d0;
     font-family: 'EB Garamond', Georgia, serif;
+    font-size: 1.1rem;
+    line-height: 1.5;
 }
 /* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
 /*---navigation bar---*/
@@ -211,8 +213,14 @@ body {
 
 #services > h2,
 #about > h2,
-#inquire > h2 {
+#inquire > h2,
+#catalog > h2 {
     margin-bottom: 2rem;
+}
+
+#catalog > h2 {
+    font-size: 2.5rem;
+    text-align: center;
 }
 
 #services > .row + .row {
@@ -354,17 +362,16 @@ body {
 #genre-tabs .nav-link:hover { filter: brightness(1.08); }
 
 #genre-tabs .nav-link.active {
-    border-top: 3px solid #c9a227;
     border-radius: 4px 0 0 4px;
     filter: brightness(1.22) saturate(1.2);
-    box-shadow: -3px 0px 8px rgba(0, 0, 0, 0.5);
+    box-shadow: inset 0 3px 0 #c9a227, -3px 0px 8px rgba(0, 0, 0, 0.5);
 }
 
 /*catalog content*/
 .table {
     table-layout: fixed;
     width: 80%;
-    height: 540px;
+    height: 546px;
     border: 2px solid #3e2a1e;
     border-collapse: collapse;
     font-size: 15px;

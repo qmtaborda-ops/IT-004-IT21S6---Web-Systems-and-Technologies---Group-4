@@ -468,13 +468,14 @@
                                         <div class="mb-3">
                                             <label for="email-input-login" class="form-label">Email</label>
                                             <input type="email" class="form-control" id="email-input-login" name="email"
-                                                placeholder="Enter your email" required>
+                                                placeholder="Enter your email" autocomplete="email" required>
                                         </div>
                                         <div class="mb-3">
                                             <label for="user-pass-login" class="form-label">Password</label>
                                             <input type="password" class="form-control" id="user-pass-login" name="password"
-                                                placeholder="Enter your password" required>
+                                                placeholder="Enter your password" autocomplete="current-password" required>
                                         </div>
+                                        <div class="auth-feedback" data-auth-message role="status" aria-live="polite" hidden></div>
                                         <div>
                                             <button type="submit" class="btn btn-primary" id="login-btn">Login</button>
                                         </div>
@@ -485,28 +486,29 @@
                                         <div class="mb-3">
                                             <label for="firstname-input" class="form-label">First Name</label>
                                             <input type="text" class="form-control" id="firstname-input" name="first_name"
-                                                placeholder="Enter your first name" required>
+                                                placeholder="Enter your first name" autocomplete="given-name" required>
                                         </div>
                                         <div class="mb-3">
                                             <label for="lastname-input" class="form-label">Last Name</label>
                                             <input type="text" class="form-control" id="lastname-input" name="last_name"
-                                                placeholder="Enter your last name" required>
+                                                placeholder="Enter your last name" autocomplete="family-name" required>
                                         </div>
                                         <div class="mb-3">
                                             <label for="email-input" class="form-label">Email</label>
                                             <input type="email" class="form-control" id="email-input" name="email"
-                                                placeholder="Enter your email" required>
+                                                placeholder="Enter your email" autocomplete="email" required>
                                         </div>
                                         <div class="mb-3">
                                             <label for="user-pass" class="form-label">Password</label>
                                             <input type="password" class="form-control" id="user-pass" name="password"
-                                                placeholder="Enter your password" required>
+                                                placeholder="Enter your password" autocomplete="new-password" minlength="8" required>
                                         </div>
                                         <div class="mb-3">
                                             <label for="confirm-pass" class="form-label">Confirm Password</label>
                                             <input type="password" class="form-control" id="confirm-pass" name="confirm_password"
-                                                placeholder="Confirm your password" required>
+                                                placeholder="Confirm your password" autocomplete="new-password" required>
                                         </div>
+                                        <div class="auth-feedback" data-auth-message role="status" aria-live="polite" hidden></div>
                                         <div>
                                             <button type="submit" class="btn btn-primary" id="signup-btn">Sign
                                                 Up</button>
@@ -524,13 +526,14 @@
                             <div class="mb-3">
                                 <label for="adminname-input" class="form-label">User Name</label>
                                 <input type="text" class="form-control" id="adminname-input" name="username"
-                                    placeholder="Enter your admin username" required>
+                                    placeholder="Enter your admin username" autocomplete="username" required>
                             </div>
                             <div class="mb-3">
                                 <label for="adminpass-input" class="form-label">Password</label>
                                 <input type="password" class="form-control" id="adminpass-input" name="password"
-                                    placeholder="Enter your password" required>
+                                    placeholder="Enter your password" autocomplete="current-password" required>
                             </div>
+                                <div class="auth-feedback" data-auth-message role="status" aria-live="polite" hidden></div>
                             <div>
                                 <button type="submit" class="btn btn-primary" id="admin-login-btn">Login</button>
                             </div>

@@ -1211,6 +1211,25 @@ body {
     box-shadow: 0 0 0 0.2rem rgba(201, 162, 39, 0.22);
 }
 
+.auth-feedback {
+    margin: 0.75rem 0;
+    padding: 0.6rem 0.75rem;
+    border-left: 3px solid #34734a;
+    background: #e8f3e8;
+    color: #245c38;
+    font-size: 0.95rem;
+}
+
+.auth-feedback[hidden] {
+    display: none;
+}
+
+.auth-feedback.is-error {
+    border-color: #a33e32;
+    background: #f9e8e4;
+    color: #7f2e25;
+}
+
 #loginModal .btn-primary {
     border-color: #c9a227;
     background: #c9a227;

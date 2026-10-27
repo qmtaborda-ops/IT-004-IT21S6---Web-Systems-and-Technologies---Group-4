@@ -84,12 +84,25 @@ if ($action === 'signup') {
     $statement = mysqli_prepare($conn, 'INSERT INTO users (first_name, last_name, email, password) VALUES (?, ?, ?, ?)');
     mysqli_stmt_bind_param($statement, 'ssss', $firstName, $lastName, $email, $hashedPassword);
 
-    if (mysqli_stmt_execute($statement)) {
-        // We do NOT start a session here, so they must log in manually.
+    $insertErrorCode = 0;
+    try {
+        $created = mysqli_stmt_execute($statement);
+    } catch (mysqli_sql_exception $error) {
+        $created = false;
+        $insertErrorCode = $error->getCode();
+        error_log($error->getMessage());
+    }
+
+    if ($created) {
+        session_regenerate_id(true);
+        $_SESSION['user_id'] = mysqli_insert_id($conn);
+        $_SESSION['user_name'] = $firstName . ' ' . $lastName;
         echo json_encode(['success' => true]);
     } else {
-        http_response_code(mysqli_stmt_errno($statement) === 1062 ? 409 : 500);
-        echo json_encode(['success' => false, 'error' => mysqli_stmt_errno($statement) === 1062 ? 'An account with this email already exists.' : 'Unable to create the account.']);
+        $insertErrorCode = $insertErrorCode ?: mysqli_stmt_errno($statement);
+        $isDuplicateEmail = $insertErrorCode === 1062;
+        http_response_code($isDuplicateEmail ? 409 : 500);
+        echo json_encode(['success' => false, 'error' => $isDuplicateEmail ? 'An account with this email already exists.' : 'Unable to create the account.']);
     }
 
     mysqli_stmt_close($statement);

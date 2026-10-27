@@ -297,6 +297,27 @@ $(document).ready(function () {
     $(window).on('scroll', updateActiveNav);
     updateActiveNav();
 
+    const signupPassword = document.getElementById('user-pass');
+    const confirmPassword = document.getElementById('confirm-pass');
+
+    function validateSignupPasswords() {
+        confirmPassword.setCustomValidity(
+            confirmPassword.value && confirmPassword.value !== signupPassword.value
+                ? 'Passwords do not match.'
+                : ''
+        );
+    }
+
+    signupPassword.addEventListener('input', validateSignupPasswords);
+    confirmPassword.addEventListener('input', validateSignupPasswords);
+
+    $('[data-auth-form]').on('input', function () {
+        const message = this.querySelector('[data-auth-message]');
+        message.hidden = true;
+        message.textContent = '';
+        message.classList.remove('is-error', 'is-success');
+    });
+
     $('[data-auth-form]').on('submit', async function (event) {
         event.preventDefault();
 
@@ -306,12 +327,9 @@ $(document).ready(function () {
         const action = form.dataset.authForm;
         const payload = Object.fromEntries(formData.entries());
 
-        if (action === 'signup' && payload.password !== payload.confirm_password) {
-            message.textContent = 'Passwords do not match.';
-            message.classList.add('text-danger');
-            message.classList.remove('text-success');
-            return;
-        }
+        message.hidden = true;
+        message.textContent = '';
+        message.classList.remove('is-error', 'is-success');
 
         try {
             const response = await fetch(API_URL + 'auth.php', {
@@ -332,20 +350,16 @@ $(document).ready(function () {
                 throw new Error(result.error || 'Unable to complete your request.');
             }
 
-            if (action === 'login' || action === 'admin_login') {
+            if (action === 'login' || action === 'admin_login' || action === 'signup') {
                 const destination = action === 'admin_login' ? '../admin-pages/admin.php' : '../user-pages/users.php';
                 window.location.href = destination;
                 return;
             }
-
-            form.reset();
-            message.textContent = 'Account created. You can now log in.';
-            message.classList.add('text-success');
-            message.classList.remove('text-danger');
         } catch (error) {
             message.textContent = error.message;
-            message.classList.add('text-danger');
-            message.classList.remove('text-success');
+            message.classList.add('is-error');
+            message.hidden = false;
+            message.setAttribute('role', 'alert');
         }
     });
 });

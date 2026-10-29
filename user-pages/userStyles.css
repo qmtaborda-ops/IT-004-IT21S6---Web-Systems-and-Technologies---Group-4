@@ -1,3 +1,5 @@
+@import url('../responsive.css');
+
 /* User page Old book theme */
 /* De Leon, Charles Jacob G, Barte, Aaron John M., Cosme, Jan Yvan G., Lucena, Rowvic Joshua C., Masiglat, Ivan Rudolf S., Taborda, Mico S  */
 
@@ -485,4 +487,37 @@ body {
   padding: 12px 14px;
   font-size: 15px;
   color: #3e2a1e;
+}
+
+/* Shrink grid tracks and their contents without widening the viewport. */
+body { grid-template-columns: 250px minmax(0, 1fr); min-height: 100dvh; }
+.library-catalog-header { grid-template-columns: minmax(0, 1fr) minmax(200px, 480px) minmax(0, 1fr); }
+.library-catalog-header > div:first-child,
+.library-catalog-header > div:first-child > div,
+.library-user-search, .library-user-greeting { min-width: 0; }
+.library-catalog-header h1, .library-user-btn { overflow-wrap: anywhere; }
+.library-user-btn { text-align: left; }
+.library-user-greeting { max-width: 100%; }
+.account-modal-body .table { min-width: 540px; }
+
+@media (max-width: 1100px) {
+  .library-catalog-header {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas: "brand greeting" "search search";
+  }
+}
+
+@media (max-width: 900px) {
+  body { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto 1fr auto; }
+  #genreTabs { min-width: 0; max-width: 100%; }
+  #genreTabs .nav-item { flex: 0 0 auto; }
+}
+
+@media (max-width: 480px) {
+  .library-catalog-header { padding: 12px; gap: 10px; }
+  .library-catalog-header > div:first-child { gap: 10px !important; }
+  .library-catalog-header h1 { font-size: 20px; }
+  .library-role-badge { font-size: 12px; }
+  .tab-content { padding: 12px; }
+  .modal-body .tab-content { padding: 0; }
 }

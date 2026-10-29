@@ -1,0 +1,32 @@
+/* Shared sizing and touch-friendly behavior for every page. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body { min-width: 0; }
+img { max-width: 100%; }
+input, select, textarea { max-width: 100%; }
+.tab-content, .tab-pane, .modal-content, .modal-body { min-width: 0; }
+.modal-body { overflow-wrap: anywhere; }
+.modal-footer { gap: 0.5rem; }
+.modal-footer > * { margin: 0; }
+.library-footer, .page-footer { overflow-wrap: anywhere; }
+.library-table-wrap, .book-table-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 767.98px) {
+  /* Keep forms readable and avoid automatic input zoom on mobile Safari. */
+  input.form-control, select.form-select, textarea.form-control,
+  .library-user-search input { font-size: 16px; }
+  .btn, .nav-link, .library-user-btn { min-height: 44px; }
+  .account-menu { max-width: calc(100vw - 2rem); }
+  .account-menu .dropdown-item { white-space: normal; }
+  .modal-dialog { margin: 0.5rem; }
+  .modal-content { max-width: 100%; }
+  .modal-body { overflow-y: auto; }
+}

@@ -47,6 +47,7 @@ CREATE TABLE IF NOT EXISTS books (
     author VARCHAR(255) NOT NULL,
     year VARCHAR(10) NOT NULL,
     quantity INT NOT NULL DEFAULT 1,
+    price DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     status VARCHAR(50) DEFAULT 'Available',
     call_no VARCHAR(50) NOT NULL,
     genre_id VARCHAR(50) NOT NULL,
@@ -71,11 +72,31 @@ CREATE TABLE IF NOT EXISTS borrow_requests (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
 );
 
--- 6. UPGRADE FOR EXISTING DATABASES (quantity, description + cover image)
+-- 6. PAYMENT REQUESTS
+CREATE TABLE IF NOT EXISTS payment_requests (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    amount DECIMAL(10,2) NOT NULL,
+    method ENUM('cash', 'gcash', 'card') NOT NULL,
+    gcash_reference VARCHAR(100) NULL,
+    card_last4 CHAR(4) NULL,
+    notes VARCHAR(500) NULL,
+    status ENUM('Pending', 'Paid', 'Rejected') NOT NULL DEFAULT 'Pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    verified_at TIMESTAMP NULL DEFAULT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- 7. UPGRADE FOR EXISTING DATABASES (quantity, description + cover image)
 -- Skips automatically if the columns already exist, so it is safe to run this whole script again.
 SET @s = IF((SELECT COUNT(*) FROM information_schema.COLUMNS
              WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'books' AND COLUMN_NAME = 'quantity') = 0,
             'ALTER TABLE books ADD COLUMN quantity INT NOT NULL DEFAULT 1', 'SELECT 1');
+PREPARE st FROM @s; EXECUTE st; DEALLOCATE PREPARE st;
+
+SET @s = IF((SELECT COUNT(*) FROM information_schema.COLUMNS
+             WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'books' AND COLUMN_NAME = 'price') = 0,
+            'ALTER TABLE books ADD COLUMN price DECIMAL(10,2) NOT NULL DEFAULT 0.00', 'SELECT 1');
 PREPARE st FROM @s; EXECUTE st; DEALLOCATE PREPARE st;
 
 SET @s = IF((SELECT COUNT(*) FROM information_schema.COLUMNS
@@ -104,6 +125,8 @@ SET @s = IF((SELECT COUNT(*) FROM information_schema.COLUMNS
             'ALTER TABLE books ADD COLUMN cover_type VARCHAR(50) NULL', 'SELECT 1');
 PREPARE st FROM @s; EXECUTE st; DEALLOCATE PREPARE st;
 ```
+
+Borrowed-copy condition is stored on `borrow_requests.item_condition` (`Good`, `Damaged`, or `Missing`). Do not set `books.status` to `Damaged` or `Missing`; those conditions belong to the specific user's returned borrowing record.
 
 > Everyone (new or existing database) just pastes and runs the SQL above - no separate file needed.
 > It creates anything missing and upgrades older databases. Cover images are stored inside the database

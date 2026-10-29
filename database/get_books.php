@@ -10,7 +10,7 @@ include 'connection.php';
 
 // Get all books with their pending request count
 $sql = "SELECT b.id, b.title, b.author, b.year, b.status, b.call_no, b.genre_id, b.is_hidden,
-               b.description, b.quantity,
+               b.description, b.quantity, b.price,
                IF(b.cover_image IS NULL, NULL, MD5(b.cover_image)) AS cover_hash,
                (SELECT GROUP_CONCAT(CONCAT(u.first_name, ' ', u.last_name) SEPARATOR ', ') 
                 FROM borrow_requests br 

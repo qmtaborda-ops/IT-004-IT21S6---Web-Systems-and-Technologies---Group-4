@@ -16,8 +16,10 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id'];
 
 // Get all borrow requests for this user, joining with the books table to get the title
-$sql = "SELECT br.id, br.borrow_date, br.return_date, br.status, b.title 
-        FROM borrow_requests br 
+$sql = "SELECT br.id, br.borrow_date, br.return_date, br.status, br.quantity, br.item_condition, b.title, b.price, b.status AS book_status,
+               (SELECT COALESCE(SUM(pr.amount), 0) FROM payment_requests pr
+                WHERE pr.user_id = br.user_id AND pr.status = 'Paid') AS paid_total
+        FROM borrow_requests br
         JOIN books b ON br.book_id = b.id 
         WHERE br.user_id = ? 
         ORDER BY br.id DESC";
